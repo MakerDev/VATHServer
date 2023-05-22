@@ -43,14 +43,16 @@ public partial class MainPage : ContentPage
         {
             Placeholder = "Enter contrast value",
             Keyboard = Keyboard.Numeric,
-            Text = DEFAULT_CONTRAST_VALUE.ToString()
+            Text = DEFAULT_CONTRAST_VALUE.ToString(),
+            TextColor = Colors.Black
         };
 
         _screenSizeEntry = new Entry
         {
             Placeholder = "Enter your screen size in inch",
             Keyboard = Keyboard.Numeric,
-            Text = DEFAULT_INCH_VALUE.ToString()
+            Text = DEFAULT_INCH_VALUE.ToString(),
+            TextColor = Colors.Black
         };
 
         _debugLabel = new Label

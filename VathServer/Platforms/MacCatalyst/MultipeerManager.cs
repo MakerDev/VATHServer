@@ -66,6 +66,11 @@ namespace VathServer.Platforms.MacCatalyst
             Console.WriteLine("Received message: " + message);
             MultipeerManager.DidReceiveData(message);
         }
+
+        public override void DidChangeState(MCSession session, MCPeerID peerID, MCSessionState state)
+        {
+            Console.WriteLine($"New state:{state}");
+        }
     }
 
     public class AdvertiserDelegate : MCNearbyServiceAdvertiserDelegate

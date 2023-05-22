@@ -26,9 +26,9 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
-	<key>Privacy - Local Network Usage Description</key>
-	<string>I need this</string>
-	<key>Bonjour services</key>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Allow the app to discover and connect to devices on the local network.</string>
+	<key>NSBonjourServices</key>
 	<array>
 		<string>_eis-eyesight._tcp</string>
 		<string>_eis-eyesight._udp</string>
