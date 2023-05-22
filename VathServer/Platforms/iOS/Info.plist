@@ -28,5 +28,12 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>Privacy - Local Network Usage Description</key>
+	<string>I need this</string>
+	<key>Bonjour services</key>
+	<array>
+		<string>_eis-eyesight-test._tcp</string>
+		<string>_eis-eyesight-test._udp</string>
+	</array>
 </dict>
 </plist>

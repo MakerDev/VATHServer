@@ -19,7 +19,7 @@ public class AppDelegate : MauiUIApplicationDelegate
             var session = new MCSession(peerID);
             session.Delegate = new SessionDelegate();
 
-            var advertiser = new MCNearbyServiceAdvertiser(peerID, null, "eis-eyesight-test");
+            var advertiser = new MCNearbyServiceAdvertiser(peerID, null, "eis-eyesight");
             advertiser.Delegate = new AdvertiserDelegate();
             advertiser.StartAdvertisingPeer();
 
