@@ -4,8 +4,8 @@ using Microsoft.Maui.Graphics;
 using System;
 using System.Linq;
 using Microsoft.VisualBasic;
-#if MACCATALYST || IOS
-using VathServer.Platforms.iOS;
+#if MACCATALYST
+using VathServer.Platforms.MacCatalyst;
 #endif
 
 namespace VathServer;
@@ -91,20 +91,6 @@ public partial class MainPage : ContentPage
             _imagesLayout.Children.Add(image);
         }
 
-        //Content = new StackLayout
-        //{
-        //    Children =
-        //    {
-        //        _imagesLayout,
-        //        _contrastEntry,
-        //        _screenSizeEntry,
-        //        applyButton,
-        //        changeImageButton,
-        //        _debugLabel
-        //    },
-        //    BackgroundColor = Colors.White,
-        //    HorizontalOptions = LayoutOptions.Center,
-        //};
         Content = new Grid
         {
             Children =
@@ -133,7 +119,7 @@ public partial class MainPage : ContentPage
 #endif
     }
 
-#if MACCATALYST || IOS
+#if MACCATALYST
     private void OnMCDataReceived(string message)
     {
         Console.WriteLine(message);
