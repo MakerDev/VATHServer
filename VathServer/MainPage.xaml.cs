@@ -4,6 +4,9 @@ using Microsoft.Maui.Graphics;
 using System;
 using System.Linq;
 using Microsoft.VisualBasic;
+#if MACCATALYST || IOS
+using VathServer.Platforms.iOS;
+#endif
 
 namespace VathServer;
 
@@ -27,7 +30,7 @@ public partial class MainPage : ContentPage
     private readonly StackLayout _imagesLayout;
     private readonly Entry _contrastEntry;
     private readonly Entry _screenSizeEntry;
-
+    private readonly Label _debugLabel;
 
     public MainPage()
     {
@@ -35,7 +38,6 @@ public partial class MainPage : ContentPage
         {
             Orientation = StackOrientation.Horizontal
         };
-
 
         _contrastEntry = new Entry
         {
@@ -51,6 +53,12 @@ public partial class MainPage : ContentPage
             Text = DEFAULT_INCH_VALUE.ToString()
         };
 
+        _debugLabel = new Label
+        {
+            Text = "Debug",
+            HorizontalTextAlignment = TextAlignment.Center,
+            HorizontalOptions = LayoutOptions.Center
+        };
 
         Button applyButton = new()
         {
@@ -83,21 +91,59 @@ public partial class MainPage : ContentPage
             _imagesLayout.Children.Add(image);
         }
 
-        Content = new StackLayout
+        //Content = new StackLayout
+        //{
+        //    Children =
+        //    {
+        //        _imagesLayout,
+        //        _contrastEntry,
+        //        _screenSizeEntry,
+        //        applyButton,
+        //        changeImageButton,
+        //        _debugLabel
+        //    },
+        //    BackgroundColor = Colors.White,
+        //    HorizontalOptions = LayoutOptions.Center,
+        //};
+        Content = new Grid
         {
             Children =
             {
-                _imagesLayout,
-                _contrastEntry,
-                _screenSizeEntry,
-                applyButton,
-                changeImageButton
+                new StackLayout
+                {
+                    Children =
+                    {
+                        _imagesLayout,
+                        _contrastEntry,
+                        _screenSizeEntry,
+                        applyButton,
+                        changeImageButton,
+                        _debugLabel
+                    },
+                    BackgroundColor = Colors.White,
+                    HorizontalOptions = LayoutOptions.Center,
+                }
             },
-            
-            HorizontalOptions = LayoutOptions.Center,
+
+            BackgroundColor = Colors.White,
         };
+
+#if MACCATALYST
+     MultipeerManager.OnDataReceived += OnMCDataReceived;
+#endif
     }
 
+#if MACCATALYST || IOS
+    private void OnMCDataReceived(string message)
+    {
+        Console.WriteLine(message);
+    }
+
+    private void SendMessage(string message)
+    {
+        MultipeerManager.SendData(message);
+    }
+#endif
     private void ChangeImage(object obj)
     {
         int randNum = new Random().Next(5);
@@ -149,6 +195,12 @@ public partial class MainPage : ContentPage
         double width = DeviceDisplay.Current.MainDisplayInfo.Width;
         double height = DeviceDisplay.Current.MainDisplayInfo.Height;
         double dpi = CalculateDPI(width, height);
+
+        if (DeviceInfo.Platform == DevicePlatform.MacCatalyst)
+        {
+            dpi = 163;
+        }
+
         double inches = centimeters / 2.54;
         return inches * dpi;
     }
