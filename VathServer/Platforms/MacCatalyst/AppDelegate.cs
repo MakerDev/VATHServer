@@ -16,7 +16,7 @@ public class AppDelegate : MauiUIApplicationDelegate
         {
             // Set up Multipeer Connectivity
             var peerID = new MCPeerID("EisVathServer");
-            var session = new MCSession(peerID);
+            var session = new MCSession(peerID, null, MCEncryptionPreference.Optional);
             session.Delegate = new SessionDelegate();
 
             var advertiser = new MCNearbyServiceAdvertiser(peerID, null, "eis-eyesight");
