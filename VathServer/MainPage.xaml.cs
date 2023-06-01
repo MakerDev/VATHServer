@@ -22,17 +22,17 @@ public class AdjustedContrastImageEffect : RoutingEffect
 
 public partial class MainPage : ContentPage
 {
-    private const double IMAGE_WIDTH_IN_CENTIMETERS = 5;
-    private const double IMAGE_HEIGHT_IN_CENTIMETERS = 5;
+    private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
     private const float DEFAULT_INCH_VALUE = 14;
 
     private readonly StackLayout _imagesLayout;
     private readonly Entry _contrastEntry;
     private readonly Entry _screenSizeEntry;
+    private readonly Entry _imageCmEntry;
     private readonly Label _debugLabel;
 
-    private double _currentSizeCm = IMAGE_HEIGHT_IN_CENTIMETERS;
+    private double _currentSizeCm = DEFAULT_SIZE_IN_CENTIMETERS;
     private double _currentOpacity = DEFAULT_CONTRAST_VALUE;
     private int _currentImageNumber = -1;
 
@@ -59,6 +59,14 @@ public partial class MainPage : ContentPage
             TextColor = Colors.Black
         };
 
+        _imageCmEntry = new Entry
+        {
+            Placeholder = "Enter your image size in cm",
+            Keyboard = Keyboard.Numeric,
+            Text = DEFAULT_SIZE_IN_CENTIMETERS.ToString(),
+            TextColor = Colors.Black
+        };
+
         _debugLabel = new Label
         {
             Text = "Debug",
@@ -79,9 +87,9 @@ public partial class MainPage : ContentPage
         };
 
         // Create the Image controls
-        AddOrChangeImagesWithSize(IMAGE_HEIGHT_IN_CENTIMETERS);
+        AddOrChangeImagesWithSize();
 
-
+        //TODO: 각 엔트리 앞에 설명 넣어주기
         Content = new Grid
         {
             Children =
@@ -93,6 +101,7 @@ public partial class MainPage : ContentPage
                         _imagesLayout,
                         _contrastEntry,
                         _screenSizeEntry,
+                        _imageCmEntry,
                         applyButton,
                         changeImageButton,
                         _debugLabel,
@@ -125,7 +134,8 @@ public partial class MainPage : ContentPage
                 break;
 
             case "ChangeSize":
-                AddOrChangeImagesWithSize(double.Parse(param));
+                _currentSizeCm = int.Parse(param);
+                AddOrChangeImagesWithSize();
                 break;
 
             case "ChangeBrightness":
@@ -143,15 +153,16 @@ public partial class MainPage : ContentPage
     private void ChangeBrightness(double scale)
     {
         _currentOpacity = scale;
-        AddOrChangeImagesWithSize(_currentSizeCm, scale);
+        AddOrChangeImagesWithSize();
     }
 
     private void ChangeImage(object obj)
     {
+        _currentSizeCm = int.Parse(_imageCmEntry.Text);
         if (_currentImageNumber == -1)
         {
             _currentImageNumber = new Random().Next(5);
-            AddOrChangeImagesWithSize(_currentSizeCm, _currentOpacity);
+            AddOrChangeImagesWithSize();
             return;
         }
         
@@ -165,9 +176,8 @@ public partial class MainPage : ContentPage
         ((Image)_imagesLayout.Children[_currentImageNumber]).IsVisible = true;
     }
 
-    private void AddOrChangeImagesWithSize(double sizeCm, double withOpacity = 1.0)
+    private void AddOrChangeImagesWithSize()
     {
-        _currentSizeCm = sizeCm;
         _imagesLayout.Children.Clear();
 
         foreach (var imageNumber in new Collection { 2, 3, 5, 6, 9 })
@@ -175,10 +185,10 @@ public partial class MainPage : ContentPage
             Image image = new()
             {
                 Source = $"img{imageNumber}.png",
-                WidthRequest = ConvertCentimetersToPixels(sizeCm),
-                HeightRequest = ConvertCentimetersToPixels(sizeCm),
+                WidthRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                HeightRequest = ConvertCentimetersToPixels(_currentSizeCm),
                 IsVisible = false,
-                Opacity = withOpacity
+                Opacity = _currentOpacity
             };
 
             _imagesLayout.Children.Add(image);
@@ -194,6 +204,7 @@ public partial class MainPage : ContentPage
     {
         if (double.TryParse(_contrastEntry.Text, out double opacity))
         {
+            _currentSizeCm = int.Parse(_imageCmEntry.Text);
             ChangeBrightness(opacity);
         }
         else
