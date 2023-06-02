@@ -25,6 +25,7 @@ public partial class MainPage : ContentPage
     private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
     private const float DEFAULT_INCH_VALUE = 14;
+    private readonly Collection<int> IMAGE_NUMBERS = new Collection { 2, 3, 5, 6, 9 };
 
     private readonly StackLayout _imagesLayout;
     private readonly Entry _contrastEntry;
@@ -34,7 +35,7 @@ public partial class MainPage : ContentPage
 
     private double _currentSizeCm = DEFAULT_SIZE_IN_CENTIMETERS;
     private double _currentOpacity = DEFAULT_CONTRAST_VALUE;
-    private int _currentImageNumber = -1;
+    private int _currentImageIndex = -1;
 
     public MainPage()
     {
@@ -141,6 +142,11 @@ public partial class MainPage : ContentPage
             case "ChangeBrightness":
                 ChangeBrightness(double.Parse(param));
                 break;
+
+            case "Answer":
+                var answer = int.Parse(param);
+                SendMessage((IMAGE_NUMBERS[_currentImageIndex] == answer).ToString());
+                break;
         }
     }
 
@@ -159,28 +165,28 @@ public partial class MainPage : ContentPage
     private void ChangeImage(object obj)
     {
         _currentSizeCm = int.Parse(_imageCmEntry.Text);
-        if (_currentImageNumber == -1)
+        if (_currentImageIndex == -1)
         {
-            _currentImageNumber = new Random().Next(5);
+            _currentImageIndex = new Random().Next(5);
             AddOrChangeImagesWithSize();
             return;
         }
         
-        _currentImageNumber = new Random().Next(5);
+        _currentImageIndex = new Random().Next(5);
 
         foreach (Image image in _imagesLayout.Children)
         {
             image.IsVisible = false;
         }
 
-        ((Image)_imagesLayout.Children[_currentImageNumber]).IsVisible = true;
+        ((Image)_imagesLayout.Children[_currentImageIndex]).IsVisible = true;
     }
 
     private void AddOrChangeImagesWithSize()
     {
         _imagesLayout.Children.Clear();
 
-        foreach (var imageNumber in new Collection { 2, 3, 5, 6, 9 })
+        foreach (var imageNumber in IMAGE_NUMBERS)
         {
             Image image = new()
             {
@@ -194,9 +200,9 @@ public partial class MainPage : ContentPage
             _imagesLayout.Children.Add(image);
         }
 
-        if (_currentImageNumber >= 0)
+        if (_currentImageIndex >= 0)
         {
-            ((Image)_imagesLayout.Children[_currentImageNumber]).IsVisible = true;
+            ((Image)_imagesLayout.Children[_currentImageIndex]).IsVisible = true;
         }
     }
 
