@@ -4,20 +4,12 @@ using Microsoft.Maui.Graphics;
 using System;
 using System.Linq;
 using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
 #if MACCATALYST
 using VathServer.Platforms.MacCatalyst;
 #endif
 
 namespace VathServer;
-
-public class AdjustedContrastImageEffect : RoutingEffect
-{
-    public float ContrastValue { get; set; }
-
-    public AdjustedContrastImageEffect() : base($"VathServer.{nameof(AdjustedContrastImageEffect)}")
-    {
-    }
-}
 
 
 public partial class MainPage : ContentPage
@@ -25,7 +17,7 @@ public partial class MainPage : ContentPage
     private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
     private const float DEFAULT_INCH_VALUE = 14;
-    private readonly Collection<int> IMAGE_NUMBERS = new Collection { 2, 3, 5, 6, 9 };
+    private readonly Collection<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
 
     private readonly StackLayout _imagesLayout;
     private readonly Entry _contrastEntry;
