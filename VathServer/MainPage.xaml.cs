@@ -112,7 +112,7 @@ public partial class MainPage : ContentPage
 #endif
     }
 
-#if MACCATALYST
+#if MACCATALYST || WINDOWS
     private void OnMCDataReceived(string message)
     {
         Console.WriteLine(message);
@@ -120,19 +120,29 @@ public partial class MainPage : ContentPage
         var command = commandParam[0];
         var param = commandParam[1];
 
-        switch(command)
+        //TODO: 이게 Multipeer에서 온 데이터로 UI를 바꾸려고 하면 thread 문제가 발생한다. 해결하기.
+        switch (command)
         {
             case "ChangeNumber":
-                ChangeImage(null);
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    ChangeImage(null);
+                });
                 break;
 
             case "ChangeSize":
                 _currentSizeCm = int.Parse(param);
-                AddOrChangeImagesWithSize();
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    AddOrChangeImagesWithSize();
+                });
                 break;
 
             case "ChangeBrightness":
-                ChangeBrightness(double.Parse(param));
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    ChangeBrightness(double.Parse(param));
+                });
                 break;
 
             case "Answer":
@@ -163,7 +173,7 @@ public partial class MainPage : ContentPage
             AddOrChangeImagesWithSize();
             return;
         }
-        
+
         _currentImageIndex = new Random().Next(5);
 
         foreach (Image image in _imagesLayout.Children)
