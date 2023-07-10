@@ -17,9 +17,10 @@ public partial class MainPage : ContentPage
     private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
     private const float DEFAULT_INCH_VALUE = 14;
-    private readonly Collection<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
+    private readonly List<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
 
     private readonly StackLayout _imagesLayout;
+    private readonly StackLayout _indicatorLayout;
     private readonly Entry _contrastEntry;
     private readonly Entry _screenSizeEntry;
     private readonly Entry _imageCmEntry;
@@ -32,6 +33,11 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         _imagesLayout = new StackLayout
+        {
+            Orientation = StackOrientation.Horizontal
+        };
+
+        _indicatorLayout = new StackLayout
         {
             Orientation = StackOrientation.Horizontal
         };
@@ -69,18 +75,18 @@ public partial class MainPage : ContentPage
 
         Button applyButton = new()
         {
-            Text = "Apply",
+            Text = "Change Brightness",
             Command = new Command(AdjustContrastForImages)
         };
 
         Button changeImageButton = new()
         {
-            Text = "New Image",
+            Text = "New Image Set",
             Command = new Command(ChangeImage)
         };
 
         // Create the Image controls
-        AddOrChangeImagesWithSize();
+        ShuffleOrChangeImagesWithSize();
 
         //TODO: 각 엔트리 앞에 설명 넣어주기
         Content = new Grid
@@ -112,7 +118,7 @@ public partial class MainPage : ContentPage
 #endif
     }
 
-#if MACCATALYST || WINDOWS
+#if MACCATALYST
     private void OnMCDataReceived(string message)
     {
         Console.WriteLine(message);
@@ -134,7 +140,7 @@ public partial class MainPage : ContentPage
                 _currentSizeCm = int.Parse(param);
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    AddOrChangeImagesWithSize();
+                    ShuffleOrChangeImagesWithSize();
                 });
                 break;
 
@@ -161,32 +167,31 @@ public partial class MainPage : ContentPage
     private void ChangeBrightness(double scale)
     {
         _currentOpacity = scale;
-        AddOrChangeImagesWithSize();
+        ShuffleOrChangeImagesWithSize(shuffle: false);
     }
 
     private void ChangeImage(object obj)
     {
         _currentSizeCm = int.Parse(_imageCmEntry.Text);
-        if (_currentImageIndex == -1)
-        {
-            _currentImageIndex = new Random().Next(5);
-            AddOrChangeImagesWithSize();
-            return;
-        }
+        //if (_currentImageIndex == -1)
+        //{
+        //    _currentImageIndex = new Random().Next(5);
+        //    ShuffleOrChangeImagesWithSize();
+        //    return;
+        //}
 
         _currentImageIndex = new Random().Next(5);
-
-        foreach (Image image in _imagesLayout.Children)
-        {
-            image.IsVisible = false;
-        }
-
-        ((Image)_imagesLayout.Children[_currentImageIndex]).IsVisible = true;
+        ShuffleOrChangeImagesWithSize();
     }
 
-    private void AddOrChangeImagesWithSize()
+    private void ShuffleOrChangeImagesWithSize(bool shuffle = true)
     {
         _imagesLayout.Children.Clear();
+
+        if (shuffle)
+        {
+            IMAGE_NUMBERS = IMAGE_NUMBERS.OrderBy(a => Guid.NewGuid()).ToList();
+        }
 
         foreach (var imageNumber in IMAGE_NUMBERS)
         {
@@ -195,16 +200,15 @@ public partial class MainPage : ContentPage
                 Source = $"img{imageNumber}.png",
                 WidthRequest = ConvertCentimetersToPixels(_currentSizeCm),
                 HeightRequest = ConvertCentimetersToPixels(_currentSizeCm),
-                IsVisible = false,
-                Opacity = _currentOpacity
+                Opacity = 1.0
             };
 
             _imagesLayout.Children.Add(image);
         }
-
+        
         if (_currentImageIndex >= 0)
         {
-            ((Image)_imagesLayout.Children[_currentImageIndex]).IsVisible = true;
+            ((Image)_imagesLayout.Children[_currentImageIndex]).Opacity = _currentOpacity;
         }
     }
 
