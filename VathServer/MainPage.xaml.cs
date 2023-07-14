@@ -17,13 +17,14 @@ public partial class MainPage : ContentPage
     private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
     private const float DEFAULT_INCH_VALUE = 14;
-    private readonly List<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
+    private List<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
 
     private readonly StackLayout _imagesLayout;
     private readonly StackLayout _indicatorLayout;
     private readonly Entry _contrastEntry;
     private readonly Entry _screenSizeEntry;
     private readonly Entry _imageCmEntry;
+    private readonly Entry _targetEntry;
     private readonly Label _debugLabel;
 
     private double _currentSizeCm = DEFAULT_SIZE_IN_CENTIMETERS;
@@ -66,6 +67,14 @@ public partial class MainPage : ContentPage
             TextColor = Colors.Black
         };
 
+        _targetEntry = new Entry
+        {
+            Placeholder = "Enter the target number",
+            Keyboard = Keyboard.Numeric,
+            Text = "",
+            TextColor = Colors.Black
+        };
+
         _debugLabel = new Label
         {
             Text = "Debug",
@@ -73,15 +82,21 @@ public partial class MainPage : ContentPage
             HorizontalOptions = LayoutOptions.Center
         };
 
-        Button applyButton = new()
+        Button changeBrightnessButton = new()
         {
             Text = "Change Brightness",
             Command = new Command(AdjustContrastForImages)
         };
 
-        Button changeImageButton = new()
+        Button changeImageSetButton = new()
         {
             Text = "New Image Set",
+            Command = new Command(ChangeImage)
+        };
+
+        Button applyTargetButton = new()
+        {
+            Text = "Apply target",
             Command = new Command(ChangeImage)
         };
 
@@ -101,8 +116,10 @@ public partial class MainPage : ContentPage
                         _contrastEntry,
                         _screenSizeEntry,
                         _imageCmEntry,
-                        applyButton,
-                        changeImageButton,
+                        _targetEntry,
+                        changeBrightnessButton,
+                        changeImageSetButton,
+                        applyTargetButton,
                         _debugLabel,
                     },
                     BackgroundColor = Colors.White,
@@ -170,6 +187,18 @@ public partial class MainPage : ContentPage
         ShuffleOrChangeImagesWithSize(shuffle: false);
     }
 
+    private void ApplyTarget(object obj)
+    {
+        var isSuccess = int.TryParse(_targetEntry.Text, out _currentImageIndex);
+
+        if (!isSuccess || (_currentImageIndex < 0 && _currentImageIndex > 4))
+        {
+            _currentImageIndex = new Random().Next(5);
+        }
+
+        _targetEntry.Text = _currentImageIndex.ToString();
+    }
+
     private void ChangeImage(object obj)
     {
         _currentSizeCm = int.Parse(_imageCmEntry.Text);
@@ -179,8 +208,7 @@ public partial class MainPage : ContentPage
         //    ShuffleOrChangeImagesWithSize();
         //    return;
         //}
-
-        _currentImageIndex = new Random().Next(5);
+        ApplyTarget(obj);
         ShuffleOrChangeImagesWithSize();
     }
 
@@ -205,7 +233,7 @@ public partial class MainPage : ContentPage
 
             _imagesLayout.Children.Add(image);
         }
-        
+
         if (_currentImageIndex >= 0)
         {
             ((Image)_imagesLayout.Children[_currentImageIndex]).Opacity = _currentOpacity;
@@ -217,6 +245,7 @@ public partial class MainPage : ContentPage
         if (double.TryParse(_contrastEntry.Text, out double opacity))
         {
             _currentSizeCm = int.Parse(_imageCmEntry.Text);
+            ApplyTarget(opacity);
             ChangeBrightness(opacity);
         }
         else
