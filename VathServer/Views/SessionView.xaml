@@ -3,7 +3,104 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:VathServer"
              xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
+             xmlns:model="clr-namespace:VathServer.Models"
              x:DataType="viewmodel:SessionViewModel"
              x:Class="VathServer.SessionView">
-    
+    <Grid BackgroundColor="White">
+        <StackLayout HorizontalOptions="Center">
+            <StackLayout>
+                <!-- Images Layout -->
+                <CollectionView
+                    HorizontalOptions="Center"
+                    ItemsLayout="HorizontalList"
+                    ItemsSource="{Binding NumberImages}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:ImageModel">
+                            <StackLayout>
+                                <Image
+                                Source="{Binding ImageUrl}"
+                                HeightRequest="{Binding Height}"
+                                WidthRequest="{Binding Width}"
+                                Opacity="{Binding Opacity}"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+
+                <CollectionView
+                    HorizontalOptions="Center"
+                    ItemsLayout="HorizontalList"
+                    ItemsSource="{Binding IndicatorImages}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:ImageModel">
+                            <Image
+                                Source="{Binding ImageUrl}"
+                                HeightRequest="{Binding Height}"
+                                WidthRequest="{Binding Width}"
+                                Opacity="{Binding Opacity}"
+                                />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Contrast Entry -->
+                <Entry
+                    x:Name="_contrastEntry"
+                    Placeholder="Enter contrast value"
+                    Keyboard="Numeric"
+                    TextColor="Black"
+                    Text="{Binding ContrastValue, Mode=TwoWay}"
+                    />
+
+                <!-- Screen Size Entry -->
+                <Entry
+                    x:Name="_screenSizeEntry"
+                    Placeholder="Enter your screen size in inch"
+                    Keyboard="Numeric"
+                    TextColor="Black"
+                    Text="{Binding ScreenSizeInInch, Mode=TwoWay}"
+                    />
+
+                <!-- Image Size Entry -->
+                <Entry
+                    x:Name="_imageCmEntry"
+                    Placeholder="Enter your image size in cm"
+                    Keyboard="Numeric"
+                    TextColor="Black"
+                    Text="{Binding ImageSizeInCm, Mode=TwoWay}"
+                    />
+
+                <!-- Target Entry -->
+                <Entry
+                    x:Name="_targetEntry"
+                    Placeholder="Enter the target number"
+                    Keyboard="Numeric"
+                    TextColor="Black"
+                    Text="{Binding TargetNumber, Mode=TwoWay}"
+                    />
+            </StackLayout>
+
+            <!-- Change Brightness Button -->
+            <Button
+                Text="Change Brightness"
+                Command="{Binding AdjustContrastForImagesCommand}"
+                />
+
+            <!-- New Image Set Button -->
+            <Button
+                Text="New Image Set"
+                Command="{Binding ChangeImageSetCommand}"
+                />
+
+            <!-- Apply Target Button -->
+            <Button
+                Text="Apply Target"
+                Command="{Binding SelectTargetCommand}"
+                />
+        </StackLayout>
+    </Grid>
 </ContentPage>
+
