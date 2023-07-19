@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
+using VathServer.ViewModels;
 #if MACCATALYST
 using VathServer.Platforms.MacCatalyst;
 #endif
@@ -12,7 +13,7 @@ using VathServer.Platforms.MacCatalyst;
 namespace VathServer;
 
 
-public partial class MainPage : ContentPage
+public partial class SessionView : ContentPage
 {
     private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
@@ -31,8 +32,10 @@ public partial class MainPage : ContentPage
     private double _currentOpacity = DEFAULT_CONTRAST_VALUE;
     private int _currentImageIndex = -1;
 
-    public MainPage()
+    public SessionView(SessionViewModel sessionViewModel)
     {
+        BindingContext = sessionViewModel;
+
         _imagesLayout = new StackLayout
         {
             Orientation = StackOrientation.Horizontal

@@ -64,4 +64,26 @@
 	  <None Remove="Resources\Images\img9.png" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\SessionView.xaml.cs">
+	    <DependentUpon>SessionView</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\SettingPageView.xaml.cs">
+	    <DependentUpon>SettingPageView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\SessionView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SettingPageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>
