@@ -17,7 +17,7 @@ public partial class MainPage : ContentPage
     private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
     private const double DEFAULT_CONTRAST_VALUE = 1.0f;
     private const float DEFAULT_INCH_VALUE = 14;
-    private List<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
+    private List<int> IMAGE_NUMBERS = new() { 2, 3, 5 };
 
     private readonly StackLayout _imagesLayout;
     private readonly StackLayout _indicatorLayout;
@@ -113,6 +113,7 @@ public partial class MainPage : ContentPage
                     Children =
                     {
                         _imagesLayout,
+                        _indicatorLayout,
                         _contrastEntry,
                         _screenSizeEntry,
                         _imageCmEntry,
@@ -185,15 +186,23 @@ public partial class MainPage : ContentPage
     {
         _currentOpacity = scale;
         ShuffleOrChangeImagesWithSize(shuffle: false);
+
+        for (int i = 0; i < IMAGE_NUMBERS.Count; i++)
+        {
+            // *2 is needed as dummy images exist.
+            ((Image)_imagesLayout.Children[i * 2]).Opacity = 1.0;
+        }
+
+        ((Image)_imagesLayout.Children[_currentImageIndex * 2]).Opacity = _currentOpacity;
     }
 
     private void ApplyTarget(object obj)
     {
         var isSuccess = int.TryParse(_targetEntry.Text, out _currentImageIndex);
 
-        if (!isSuccess || (_currentImageIndex < 0 && _currentImageIndex > 4))
+        if (!isSuccess || (_currentImageIndex < 0 && _currentImageIndex > IMAGE_NUMBERS.Count - 1))
         {
-            _currentImageIndex = new Random().Next(5);
+            _currentImageIndex = new Random().Next(IMAGE_NUMBERS.Count);
         }
 
         _targetEntry.Text = _currentImageIndex.ToString();
@@ -210,6 +219,36 @@ public partial class MainPage : ContentPage
         //}
         ApplyTarget(obj);
         ShuffleOrChangeImagesWithSize();
+        SetupIndicator();
+    }
+
+    private void SetupIndicator()
+    {
+        if (_indicatorLayout.Children.Count > 0)
+        {
+            for (int i = 0; i < IMAGE_NUMBERS.Count; i++)
+            {
+                ((Image)_indicatorLayout.Children[i * 2]).Opacity = 0.0;
+            }
+
+
+            ((Image)_indicatorLayout.Children[_currentImageIndex * 2]).Opacity = 1.0;
+
+            return;
+        }
+
+        for (int i = 0; i < IMAGE_NUMBERS.Count * 2 - 1; i++)
+        {
+            Image indicator = new()
+            {
+                Source = "pointing_hand.png",
+                WidthRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                HeightRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                Opacity = 0.0
+            };
+
+            _indicatorLayout.Children.Add(indicator);
+        }
     }
 
     private void ShuffleOrChangeImagesWithSize(bool shuffle = true)
@@ -221,22 +260,33 @@ public partial class MainPage : ContentPage
             IMAGE_NUMBERS = IMAGE_NUMBERS.OrderBy(a => Guid.NewGuid()).ToList();
         }
 
-        foreach (var imageNumber in IMAGE_NUMBERS)
+        for (int i = 0; i < IMAGE_NUMBERS.Count * 2 - 1; i++)
         {
-            Image image = new()
+            if (i % 2 == 0)
             {
-                Source = $"img{imageNumber}.png",
-                WidthRequest = ConvertCentimetersToPixels(_currentSizeCm),
-                HeightRequest = ConvertCentimetersToPixels(_currentSizeCm),
-                Opacity = 1.0
-            };
+                Image image = new()
+                {
+                    Source = $"img{IMAGE_NUMBERS[i / 2]}.png",
+                    WidthRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                    HeightRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                    Opacity = 1.0
+                };
 
-            _imagesLayout.Children.Add(image);
-        }
+                _imagesLayout.Children.Add(image);
+            }
+            else
+            {
+                //dummy image
+                Image image = new()
+                {
+                    Source = $"img2.png",
+                    WidthRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                    HeightRequest = ConvertCentimetersToPixels(_currentSizeCm),
+                    Opacity = 0
+                };
 
-        if (_currentImageIndex >= 0)
-        {
-            ((Image)_imagesLayout.Children[_currentImageIndex]).Opacity = _currentOpacity;
+                _imagesLayout.Children.Add(image);
+            }
         }
     }
 
