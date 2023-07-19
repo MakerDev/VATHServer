@@ -11,26 +11,18 @@ using VathServer.Platforms.MacCatalyst;
 
 namespace VathServer.ViewModels
 {
+    [QueryProperty(nameof(ContrastValue), "ContrastValue")]
+    [QueryProperty(nameof(ScreenSizeInInch), "ScreenSizeInInch")]
     public partial class SessionViewModel : ObservableObject
     {
-        private const double DEFAULT_SIZE_IN_CENTIMETERS = 5;
-        private const double DEFAULT_CONTRAST_VALUE = 1.0f;
-        private const float DEFAULT_INCH_VALUE = 14;
-
+        private readonly List<double> IMAGE_SIZES = new() { 10, 8, 6, 4, 2 }; // 각 레벨 별 이미지 크기
         private List<int> IMAGE_NUMBERS = new() { 2, 3, 5 };
 
-        private double _currentSizeCm = DEFAULT_SIZE_IN_CENTIMETERS;
-        private double _currentOpacity = DEFAULT_CONTRAST_VALUE;
+        private int _currentLevel = 0;
         private int _currentImageIndex = -1;
 
-        [ObservableProperty]
-        private double _contrastValue = 1.0;
-        [ObservableProperty]
-        private double _screenSizeInInch = 14;
-        [ObservableProperty]
-        private double _imageSizeInCm = 5;
-        [ObservableProperty]
-        private int _targetNumber = 0;
+        public double ContrastValue { get; set; } = 1;
+        public double ScreenSizeInInch { get; set; } = 14;
 
         [ObservableProperty]
         private ObservableCollection<ImageModel> _numberImages = new();
@@ -39,8 +31,8 @@ namespace VathServer.ViewModels
 
         public SessionViewModel()
         {
-            //// Create the Image controls
-            ChangeImagesWithSize();
+            // Create the Image controls
+            ChangeImageSet();
 
 #if MACCATALYST
      MultipeerManager.OnDataReceived += OnMCDataReceived;
@@ -58,28 +50,6 @@ namespace VathServer.ViewModels
         //TODO: 이게 Multipeer에서 온 데이터로 UI를 바꾸려고 하면 thread 문제가 발생한다. 해결하기.
         switch (command)
         {
-            case "ChangeNumber":
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    ChangeImageSet(null);
-                });
-                break;
-
-            case "ChangeSize":
-                _currentSizeCm = int.Parse(param);
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    ChangeImagesWithSize();
-                });
-                break;
-
-            case "ChangeBrightness":
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    ChangeBrightness(double.Parse(param));
-                });
-                break;
-
             case "Answer":
                 var answer = int.Parse(param);
                 SendMessage((IMAGE_NUMBERS[_currentImageIndex] == answer).ToString());
@@ -93,36 +63,15 @@ namespace VathServer.ViewModels
     }
 #endif
 
-        private void ChangeBrightness(double scale)
+        private void SelectTarget()
         {
-            _currentOpacity = scale;
-            ChangeImagesWithSize(shuffle: false);
-
-            for (int i = 0; i < IMAGE_NUMBERS.Count; i++)
-            {
-                // *2 is needed as dummy images exist.
-                NumberImages[i * 2].Opacity = 1.0;
-            }
-
-            NumberImages[_currentImageIndex * 2].Opacity = _currentOpacity;
-            OnPropertyChanged(nameof(NumberImages));
+            _currentImageIndex = new Random().Next(IMAGE_NUMBERS.Count);
         }
 
         [RelayCommand]
-        private void SelectTarget(object obj)
+        private void ChangeImageSet()
         {
-            _currentImageIndex = TargetNumber;
-
-            if (_currentImageIndex < 0 && _currentImageIndex > IMAGE_NUMBERS.Count - 1)
-            {
-                _currentImageIndex = new Random().Next(IMAGE_NUMBERS.Count);
-            }
-        }
-
-        [RelayCommand]
-        private void ChangeImageSet(object obj)
-        {
-            SelectTarget(obj);
+            SelectTarget();
             ChangeImagesWithSize();
             SetupIndicator();
             OnPropertyChanged(nameof(NumberImages));
@@ -138,8 +87,8 @@ namespace VathServer.ViewModels
                     ImageModel indicator = new()
                     {
                         ImageUrl = "pointing_hand.png",
-                        Width = ConvertCentimetersToPixels(_currentSizeCm),
-                        Height = ConvertCentimetersToPixels(_currentSizeCm),
+                        Width = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
+                        Height = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
                         Opacity = 0.0
                     };
 
@@ -171,10 +120,15 @@ namespace VathServer.ViewModels
                 ImageModel image = new()
                 {
                     ImageUrl = $"img{IMAGE_NUMBERS[i / 2]}.png",
-                    Width = ConvertCentimetersToPixels(_currentSizeCm),
-                    Height = ConvertCentimetersToPixels(_currentSizeCm),
-                    Opacity = 1.0
+                    Width = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
+                    Height = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
+                    Opacity = ContrastValue
                 };
+
+                if (i == _currentImageIndex)
+                {
+                    image.Opacity = 1.0;
+                }
 
                 if (i % 2 != 0)
                 {
@@ -184,14 +138,6 @@ namespace VathServer.ViewModels
 
                 NumberImages.Add(image);
             }
-        }
-
-        [RelayCommand]
-        private void AdjustContrastForImages()
-        {
-            var opacity = ContrastValue;
-            SelectTarget(opacity);
-            ChangeBrightness(opacity);
         }
 
         private double CalculateDPI(double screenSizeInInch, double width, double height)

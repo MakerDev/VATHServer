@@ -1,15 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:VathServer"
-             xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
-             xmlns:model="clr-namespace:VathServer.Models"
-             x:DataType="viewmodel:SessionViewModel"
-             x:Class="VathServer.SessionView">
+<ContentPage
+    x:Class="VathServer.SessionView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:VathServer"
+    xmlns:model="clr-namespace:VathServer.Models"
+    xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
+    x:DataType="viewmodel:SessionViewModel">
     <Grid BackgroundColor="White">
         <StackLayout HorizontalOptions="Center">
             <StackLayout>
-                <!-- Images Layout -->
+                <!--  Images Layout  -->
                 <CollectionView
                     HorizontalOptions="Center"
                     ItemsLayout="HorizontalList"
@@ -19,10 +20,10 @@
                         <DataTemplate x:DataType="model:ImageModel">
                             <StackLayout>
                                 <Image
-                                Source="{Binding ImageUrl}"
-                                HeightRequest="{Binding Height}"
-                                WidthRequest="{Binding Width}"
-                                Opacity="{Binding Opacity}"/>
+                                    HeightRequest="{Binding Height}"
+                                    Opacity="{Binding Opacity}"
+                                    Source="{Binding ImageUrl}"
+                                    WidthRequest="{Binding Width}" />
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -37,69 +38,17 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:ImageModel">
                             <Image
-                                Source="{Binding ImageUrl}"
                                 HeightRequest="{Binding Height}"
-                                WidthRequest="{Binding Width}"
                                 Opacity="{Binding Opacity}"
-                                />
+                                Source="{Binding ImageUrl}"
+                                WidthRequest="{Binding Width}" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
-                <!-- Contrast Entry -->
-                <Entry
-                    x:Name="_contrastEntry"
-                    Placeholder="Enter contrast value"
-                    Keyboard="Numeric"
-                    TextColor="Black"
-                    Text="{Binding ContrastValue, Mode=TwoWay}"
-                    />
-
-                <!-- Screen Size Entry -->
-                <Entry
-                    x:Name="_screenSizeEntry"
-                    Placeholder="Enter your screen size in inch"
-                    Keyboard="Numeric"
-                    TextColor="Black"
-                    Text="{Binding ScreenSizeInInch, Mode=TwoWay}"
-                    />
-
-                <!-- Image Size Entry -->
-                <Entry
-                    x:Name="_imageCmEntry"
-                    Placeholder="Enter your image size in cm"
-                    Keyboard="Numeric"
-                    TextColor="Black"
-                    Text="{Binding ImageSizeInCm, Mode=TwoWay}"
-                    />
-
-                <!-- Target Entry -->
-                <Entry
-                    x:Name="_targetEntry"
-                    Placeholder="Enter the target number"
-                    Keyboard="Numeric"
-                    TextColor="Black"
-                    Text="{Binding TargetNumber, Mode=TwoWay}"
-                    />
             </StackLayout>
 
-            <!-- Change Brightness Button -->
-            <Button
-                Text="Change Brightness"
-                Command="{Binding AdjustContrastForImagesCommand}"
-                />
-
-            <!-- New Image Set Button -->
-            <Button
-                Text="New Image Set"
-                Command="{Binding ChangeImageSetCommand}"
-                />
-
-            <!-- Apply Target Button -->
-            <Button
-                Text="Apply Target"
-                Command="{Binding SelectTargetCommand}"
-                />
+            <!--  New Image Set Button  -->
+            <Button Command="{Binding ChangeImageSetCommand}" Text="New Image Set" />
         </StackLayout>
     </Grid>
 </ContentPage>

@@ -7,12 +7,24 @@ using System.Threading.Tasks;
 
 namespace VathServer.ViewModels
 {
-    public partial class SettingPageViewModel: ObservableObject
+    public partial class SettingPageViewModel : ObservableObject
     {
+        [ObservableProperty]
+        private double _screenSizeInInch = 14;
+        [ObservableProperty]
+        private double _imageSizeInCm = 5;
+        [ObservableProperty]
+        private double _contrastValue = 1.0;
+
         [RelayCommand]
         private async Task StartSessionAsync()
         {
-            await Shell.Current.GoToAsync(nameof(SessionView), true);
+            var navigationParameter = new Dictionary<string, object>()
+            {
+                { "ScreenSizeInInch", ScreenSizeInInch },
+                { "ContrastValue", ContrastValue }
+            };
+            await Shell.Current.GoToAsync(nameof(SessionView), navigationParameter);
         }
     }
 }
