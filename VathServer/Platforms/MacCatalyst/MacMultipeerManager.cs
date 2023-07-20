@@ -19,6 +19,7 @@ namespace VathServer.Platforms.MacCatalyst
         //Define an event that has one parameter of type string
         //public delegate void OnDataReceviedHandler(string message);
         public event Action<string> OnDataReceived;
+        public event Action OnDeviceConnected;
 
         public MacMultipeerManager()
         {
@@ -60,6 +61,11 @@ namespace VathServer.Platforms.MacCatalyst
             }
         }
 
+        public void DidConnect()
+        {
+            OnDeviceConnected?.Invoke();
+        }
+
         public void DidReceiveData(string message)
         {
             OnDataReceived?.Invoke(message);
@@ -83,6 +89,10 @@ namespace VathServer.Platforms.MacCatalyst
         public override void DidChangeState(MCSession session, MCPeerID peerID, MCSessionState state)
         {
             Console.WriteLine($"New state:{state}");
+            if (state==MCSessionState.Connected)
+            {
+                MacMultipeerManager.Instance?.DidConnect();
+            }
         }
     }
 
