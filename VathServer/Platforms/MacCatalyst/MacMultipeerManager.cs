@@ -5,20 +5,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VathServer.Interfaces;
 
 namespace VathServer.Platforms.MacCatalyst
 {
 
-    public static class MultipeerManager
+    public class MacMultipeerManager : IMultipeerManager
     {
+        public static MacMultipeerManager Instance { get; private set; } = null;
         public static MCSession Session { get; set; }
         public static MCNearbyServiceAdvertiser Advertiser { get; set; }
 
         //Define an event that has one parameter of type string
-        public delegate void OnDataReceviedHandler(string message);
-        public static event OnDataReceviedHandler OnDataReceived;
+        //public delegate void OnDataReceviedHandler(string message);
+        public event Action<string> OnDataReceived;
 
-        public static void SendData(string message)
+        public MacMultipeerManager()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+        }
+
+        public bool SendData(string message)
         {
             var session = Session;
             var peers = session.ConnectedPeers;
@@ -33,21 +43,24 @@ namespace VathServer.Platforms.MacCatalyst
                 {
                     // Handle error while sending data
                     Console.WriteLine("Error sending data: " + error.LocalizedDescription);
+                    return false;
                 }
                 else
                 {
                     // Data sent successfully
                     Console.WriteLine("Data sent successfully");
+                    return true;
                 }
             }
             else
             {
                 // No connected peers
                 Console.WriteLine("No connected peers");
+                return false;
             }
         }
 
-        public static void DidReceiveData(string message)
+        public void DidReceiveData(string message)
         {
             OnDataReceived?.Invoke(message);
         }
@@ -64,7 +77,7 @@ namespace VathServer.Platforms.MacCatalyst
 
             // Do something with the received message
             Console.WriteLine("Received message: " + message);
-            MultipeerManager.DidReceiveData(message);
+            MacMultipeerManager.Instance?.DidReceiveData(message);
         }
 
         public override void DidChangeState(MCSession session, MCPeerID peerID, MCSessionState state)
@@ -78,7 +91,7 @@ namespace VathServer.Platforms.MacCatalyst
         public override void DidReceiveInvitationFromPeer(MCNearbyServiceAdvertiser advertiser, MCPeerID peerID, NSData context, MCNearbyServiceAdvertiserInvitationHandler invitationHandler)
         {
             // Accept the invitation and establish a session
-            var session = MultipeerManager.Session;
+            var session = MacMultipeerManager.Session;
             invitationHandler(true, session);
         }
     }

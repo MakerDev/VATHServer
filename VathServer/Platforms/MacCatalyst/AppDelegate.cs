@@ -24,8 +24,8 @@ public class AppDelegate : MauiUIApplicationDelegate
             advertiser.StartAdvertisingPeer();
 
             // Store the session and advertiser objects
-            MultipeerManager.Session = session;
-            MultipeerManager.Advertiser = advertiser;
+            MacMultipeerManager.Session = session;
+            MacMultipeerManager.Advertiser = advertiser;
         }
 
         return base.FinishedLaunching(app, options);

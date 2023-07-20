@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VathServer.Interfaces;
 using VathServer.Models;
 
 #if MACCATALYST
@@ -15,7 +16,9 @@ namespace VathServer.ViewModels
     [QueryProperty(nameof(ScreenSizeInInch), "ScreenSizeInInch")]
     public partial class SessionViewModel : ObservableObject
     {
-        private readonly List<double> IMAGE_SIZES = new() { 10, 8, 6, 4, 2 }; // 각 레벨 별 이미지 크기
+        private readonly List<double> IMAGE_SIZES = new() { 6, 5.2, 4.2, 3.3, 2.6, 2.1, 1.8, 1.3, 1, 0.8, 0.65, 0.5, 0.4 }; // 각 레벨 별 이미지 크기
+        private readonly List<double> EYESIGHT_RESULTS = new() { 0.1, 0.12, 0.16, 0.2, 0.25, 0.32, 0.4, 0.5, 0.63, 0.8, 1, 1.25, 1.6 };
+        private readonly IMultipeerManager _multipeerManager;
         private List<int> IMAGE_NUMBERS = new() { 2, 3, 5 };
 
         private int _currentLevel = 0;
@@ -29,13 +32,14 @@ namespace VathServer.ViewModels
         [ObservableProperty]
         private ObservableCollection<ImageModel> _indicatorImages = new();
 
-        public SessionViewModel()
+        public SessionViewModel(IMultipeerManager multipeerManager)
         {
             // Create the Image controls
             ChangeImageSet();
-
+            _multipeerManager = multipeerManager;
+            _multipeerManager.OnDataReceived += OnDataReceived;
 #if MACCATALYST
-     MultipeerManager.OnDataReceived += OnMCDataReceived;
+     MacMultipeerManager.OnDataReceived += OnMCDataReceived;
 #endif
         }
 
@@ -59,9 +63,46 @@ namespace VathServer.ViewModels
 
     private void SendMessage(string message)
     {
-        MultipeerManager.SendData(message);
+        MacMultipeerManager.SendData(message);
     }
 #endif
+        private void OnDataReceived(string message)
+        {
+            Console.WriteLine(message);
+            var commandParam = message.Split(' ');
+            var command = commandParam[0];
+            var param = commandParam[1];
+
+            //TODO: 이게 Multipeer에서 온 데이터로 UI를 바꾸려고 하면 thread 문제가 발생한다. 해결하기.
+            switch (command)
+            {
+                case "Answer":
+                    var answer = int.Parse(param);
+                    var isCorrect = IMAGE_NUMBERS[_currentImageIndex] == answer;
+                    _multipeerManager.SendData(isCorrect.ToString());
+
+                    if (isCorrect)
+                    {
+                        MoveToNextLevel();
+                    }
+                    break;
+            }
+        }
+
+
+
+        private void MoveToNextLevel()
+        {
+            //TODO: Display effect
+            _currentLevel++;
+
+            if (_currentLevel >= IMAGE_SIZES.Count)
+            {
+                //TODO: Move to end page
+            }
+
+            ChangeImageSet();
+        }
 
         private void SelectTarget()
         {

@@ -1,4 +1,10 @@
 ﻿using VathServer.ViewModels;
+using VathServer.Interfaces;
+#if WINDOWS
+using VathServer.Platforms.Windows;
+#elif MACCATALYST
+using VathServer.Platforms.MacCatalyst;
+#endif
 
 namespace VathServer;
 
@@ -19,6 +25,11 @@ public static class MauiProgram
 		builder.Services.AddTransient<SessionView>();
 		builder.Services.AddTransient<SettingPageViewModel>();
 		builder.Services.AddTransient<SessionViewModel>();
+#if MACCATALYST
+		builder.Services.AddSingleton<IMultipeerManager, MacMultipeerManager>();
+#elif WINDOWS
+        builder.Services.AddSingleton<IMultipeerManager, WindowsMultipeerManager>();
+#endif
 
 		Routing.RegisterRoute(nameof(SessionView), typeof(SessionView));
 
