@@ -7,69 +7,63 @@
     xmlns:model="clr-namespace:VathServer.Models"
     xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
     x:DataType="viewmodel:SessionViewModel">
-    <Grid BackgroundColor="White" VerticalOptions="CenterAndExpand">
-        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-            <StackLayout>
-                <!--  Dummy view  -->
-                <CollectionView
-                    HorizontalOptions="Center"
-                    ItemsLayout="HorizontalList"
-                    ItemsSource="{Binding IndicatorImages}"
-                    Opacity="0"
-                    SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:ImageModel">
-                            <Image
-                                HeightRequest="{Binding Height}"
-                                Opacity="{Binding Opacity}"
-                                Source="{Binding ImageUrl}"
-                                WidthRequest="{Binding Width}" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-                <!--  Images Layout  -->
-                <CollectionView
-                    HorizontalOptions="Center"
-                    ItemsLayout="HorizontalList"
-                    ItemsSource="{Binding NumberImages}"
-                    SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:ImageModel">
-                            <StackLayout>
-                                <Image
-                                    HeightRequest="{Binding Height}"
-                                    Opacity="{Binding Opacity}"
-                                    Source="{Binding ImageUrl}"
-                                    WidthRequest="{Binding Width}" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <!--  Dummy view  -->
+        <CollectionView
+            HorizontalOptions="Center"
+            ItemsLayout="HorizontalList"
+            ItemsSource="{Binding IndicatorImages}"
+            Opacity="0"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ImageModel">
+                    <Image
+                        HeightRequest="{Binding Height}"
+                        Opacity="{Binding Opacity}"
+                        Source="{Binding ImageUrl}"
+                        WidthRequest="{Binding Width}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <!--  Images Layout  -->
+        <CollectionView
+            x:Name="_debugTest"
+            HorizontalOptions="Center"
+            ItemsLayout="HorizontalList"
+            ItemsSource="{Binding NumberImages}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ImageModel">
+                    <Image
+                        HeightRequest="{Binding Height}"
+                        Opacity="{Binding Opacity}"
+                        Source="{Binding ImageUrl}"
+                        WidthRequest="{Binding Width}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
+        <CollectionView
+            HorizontalOptions="Center"
+            ItemsLayout="HorizontalList"
+            ItemsSource="{Binding IndicatorImages}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ImageModel">
+                    <Image
+                        HeightRequest="{Binding Height}"
+                        Opacity="{Binding Opacity}"
+                        Source="{Binding ImageUrl}"
+                        WidthRequest="{Binding Width}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-                <CollectionView
-                    HorizontalOptions="Center"
-                    ItemsLayout="HorizontalList"
-                    ItemsSource="{Binding IndicatorImages}"
-                    SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:ImageModel">
-                            <Image
-                                HeightRequest="{Binding Height}"
-                                Opacity="{Binding Opacity}"
-                                Source="{Binding ImageUrl}"
-                                WidthRequest="{Binding Width}" />
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-
-            <!--  New Image Set Button  -->
-            <Button
-                Command="{Binding ChangeImageSetCommand}"
-                IsVisible="true"
-                Text="New Image Set" />
-        </StackLayout>
-    </Grid>
+        <!--  New Image Set Button  -->
+        <Button
+            Command="{Binding ChangeImageSetCommand}"
+            IsVisible="true"
+            Text="New Image Set" />
+    </StackLayout>
 </ContentPage>
 
