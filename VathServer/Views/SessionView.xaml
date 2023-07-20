@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:VathServer"
     xmlns:model="clr-namespace:VathServer.Models"
     xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
-    x:DataType="viewmodel:SessionViewModel">
+    x:DataType="viewmodel:SessionViewModel"
+    BackgroundColor="White">
     <StackLayout
         BackgroundColor="White"
         HorizontalOptions="Center"

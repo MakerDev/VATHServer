@@ -57,6 +57,16 @@ namespace VathServer.ViewModels
                     {
                         MainThread.BeginInvokeOnMainThread(MoveToNextLevel);
                     }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            SelectTarget();
+                            ChangeImagesWithSize(shuffle: false);
+                            SetupIndicator();
+                            OnPropertyChanged(nameof(IndicatorImages));
+                        });
+                    }
                     break;
             }
         }
@@ -78,7 +88,13 @@ namespace VathServer.ViewModels
 
         private void SelectTarget()
         {
-            _currentImageIndex = new Random().Next(IMAGE_NUMBERS.Count);
+            var newTargetIndex = new Random().Next(IMAGE_NUMBERS.Count);
+            while (newTargetIndex == _currentImageIndex)
+            {
+                newTargetIndex = new Random().Next(IMAGE_NUMBERS.Count);
+            }
+
+            _currentImageIndex = newTargetIndex;
         }
 
         [RelayCommand]
