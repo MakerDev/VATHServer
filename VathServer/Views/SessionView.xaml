@@ -7,9 +7,15 @@
     xmlns:model="clr-namespace:VathServer.Models"
     xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
     x:DataType="viewmodel:SessionViewModel">
-    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+    <StackLayout
+        BackgroundColor="White"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
         <!--  Dummy view  -->
-        <HorizontalStackLayout Opacity="0">
+        <HorizontalStackLayout
+            HorizontalOptions="Center"
+            Opacity="0"
+            VerticalOptions="Start">
             <Image
                 HeightRequest="{Binding NumberImages[0].Height}"
                 Opacity="{Binding NumberImages[0].Opacity}"
@@ -37,7 +43,7 @@
                 WidthRequest="{Binding NumberImages[4].Width}" />
         </HorizontalStackLayout>
 
-        <HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
             <Image
                 HeightRequest="{Binding NumberImages[0].Height}"
                 Opacity="{Binding NumberImages[0].Opacity}"
@@ -65,7 +71,7 @@
                 WidthRequest="{Binding NumberImages[4].Width}" />
         </HorizontalStackLayout>
 
-        <HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="End">
             <Image
                 HeightRequest="{Binding IndicatorImages[0].Height}"
                 Opacity="{Binding IndicatorImages[0].Opacity}"
@@ -93,10 +99,9 @@
                 WidthRequest="{Binding IndicatorImages[4].Width}" />
         </HorizontalStackLayout>
 
-
         <!--  New Image Set Button  -->
         <Button
-            Command="{Binding ChangeImageSetCommand}"
+            Command="{Binding MoveToNextLevelCommand}"
             IsVisible="true"
             Text="New Image Set" />
     </StackLayout>

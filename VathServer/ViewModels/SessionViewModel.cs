@@ -31,10 +31,6 @@ namespace VathServer.ViewModels
         private ObservableCollection<ImageModel> _numberImages = new();
         [ObservableProperty]
         private ObservableCollection<ImageModel> _indicatorImages = new();
-        [ObservableProperty]
-        private double _imageHeight = 300.0;
-        [ObservableProperty]
-        private double _imageWidth = 300.0;
 
         public SessionViewModel(IMultipeerManager multipeerManager)
         {
@@ -59,12 +55,13 @@ namespace VathServer.ViewModels
 
                     if (isCorrect)
                     {
-                        MoveToNextLevel();
+                        MainThread.BeginInvokeOnMainThread(MoveToNextLevel);
                     }
                     break;
             }
         }
 
+        [RelayCommand]
         private void MoveToNextLevel()
         {
             //TODO: Display effect
@@ -73,6 +70,7 @@ namespace VathServer.ViewModels
             if (_currentLevel >= IMAGE_SIZES.Count)
             {
                 //TODO: Move to end page
+                return;
             }
 
             ChangeImageSet();
@@ -111,11 +109,12 @@ namespace VathServer.ViewModels
                 }
             }
 
-            for (int i = 0; i < IMAGE_NUMBERS.Count; i++)
+            for (int i = 0; i < IMAGE_NUMBERS.Count * 2 - 1; i++)
             {
-                IndicatorImages[i * 2].Opacity = 0.0;
+                IndicatorImages[i].Width = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
+                IndicatorImages[i].Height = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
+                IndicatorImages[i].Opacity = 0.0;
             }
-
 
             IndicatorImages[_currentImageIndex * 2].Opacity = 1.0;
             return;
