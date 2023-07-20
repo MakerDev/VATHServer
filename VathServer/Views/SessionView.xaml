@@ -9,55 +9,90 @@
     x:DataType="viewmodel:SessionViewModel">
     <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
         <!--  Dummy view  -->
-        <CollectionView
-            HorizontalOptions="Center"
-            ItemsLayout="HorizontalList"
-            ItemsSource="{Binding IndicatorImages}"
-            Opacity="0"
-            SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:ImageModel">
-                    <Image
-                        HeightRequest="{Binding Height}"
-                        Opacity="{Binding Opacity}"
-                        Source="{Binding ImageUrl}"
-                        WidthRequest="{Binding Width}" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <!--  Images Layout  -->
-        <CollectionView
-            x:Name="_debugTest"
-            HorizontalOptions="Center"
-            ItemsLayout="HorizontalList"
-            ItemsSource="{Binding NumberImages}"
-            SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:ImageModel">
-                    <Image
-                        HeightRequest="{Binding Height}"
-                        Opacity="{Binding Opacity}"
-                        Source="{Binding ImageUrl}"
-                        WidthRequest="{Binding Width}" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <HorizontalStackLayout Opacity="0">
+            <Image
+                HeightRequest="{Binding NumberImages[0].Height}"
+                Opacity="{Binding NumberImages[0].Opacity}"
+                Source="{Binding NumberImages[0].ImageUrl}"
+                WidthRequest="{Binding NumberImages[0].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[1].Height}"
+                Opacity="{Binding NumberImages[1].Opacity}"
+                Source="{Binding NumberImages[1].ImageUrl}"
+                WidthRequest="{Binding NumberImages[1].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[2].Height}"
+                Opacity="{Binding NumberImages[2].Opacity}"
+                Source="{Binding NumberImages[2].ImageUrl}"
+                WidthRequest="{Binding NumberImages[2].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[3].Height}"
+                Opacity="{Binding NumberImages[3].Opacity}"
+                Source="{Binding NumberImages[3].ImageUrl}"
+                WidthRequest="{Binding NumberImages[3].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[4].Height}"
+                Opacity="{Binding NumberImages[4].Opacity}"
+                Source="{Binding NumberImages[4].ImageUrl}"
+                WidthRequest="{Binding NumberImages[4].Width}" />
+        </HorizontalStackLayout>
 
-        <CollectionView
-            HorizontalOptions="Center"
-            ItemsLayout="HorizontalList"
-            ItemsSource="{Binding IndicatorImages}"
-            SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:ImageModel">
-                    <Image
-                        HeightRequest="{Binding Height}"
-                        Opacity="{Binding Opacity}"
-                        Source="{Binding ImageUrl}"
-                        WidthRequest="{Binding Width}" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <HorizontalStackLayout>
+            <Image
+                HeightRequest="{Binding NumberImages[0].Height}"
+                Opacity="{Binding NumberImages[0].Opacity}"
+                Source="{Binding NumberImages[0].ImageUrl}"
+                WidthRequest="{Binding NumberImages[0].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[1].Height}"
+                Opacity="{Binding NumberImages[1].Opacity}"
+                Source="{Binding NumberImages[1].ImageUrl}"
+                WidthRequest="{Binding NumberImages[1].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[2].Height}"
+                Opacity="{Binding NumberImages[2].Opacity}"
+                Source="{Binding NumberImages[2].ImageUrl}"
+                WidthRequest="{Binding NumberImages[2].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[3].Height}"
+                Opacity="{Binding NumberImages[3].Opacity}"
+                Source="{Binding NumberImages[3].ImageUrl}"
+                WidthRequest="{Binding NumberImages[3].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[4].Height}"
+                Opacity="{Binding NumberImages[4].Opacity}"
+                Source="{Binding NumberImages[4].ImageUrl}"
+                WidthRequest="{Binding NumberImages[4].Width}" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout>
+            <Image
+                HeightRequest="{Binding IndicatorImages[0].Height}"
+                Opacity="{Binding IndicatorImages[0].Opacity}"
+                Source="{Binding IndicatorImages[0].ImageUrl}"
+                WidthRequest="{Binding IndicatorImages[0].Width}" />
+            <Image
+                HeightRequest="{Binding IndicatorImages[1].Height}"
+                Opacity="{Binding IndicatorImages[1].Opacity}"
+                Source="{Binding IndicatorImages[1].ImageUrl}"
+                WidthRequest="{Binding IndicatorImages[1].Width}" />
+            <Image
+                HeightRequest="{Binding IndicatorImages[2].Height}"
+                Opacity="{Binding IndicatorImages[2].Opacity}"
+                Source="{Binding IndicatorImages[2].ImageUrl}"
+                WidthRequest="{Binding IndicatorImages[2].Width}" />
+            <Image
+                HeightRequest="{Binding IndicatorImages[3].Height}"
+                Opacity="{Binding IndicatorImages[3].Opacity}"
+                Source="{Binding IndicatorImages[3].ImageUrl}"
+                WidthRequest="{Binding IndicatorImages[3].Width}" />
+            <Image
+                HeightRequest="{Binding IndicatorImages[4].Height}"
+                Opacity="{Binding IndicatorImages[4].Opacity}"
+                Source="{Binding IndicatorImages[4].ImageUrl}"
+                WidthRequest="{Binding IndicatorImages[4].Width}" />
+        </HorizontalStackLayout>
+
 
         <!--  New Image Set Button  -->
         <Button

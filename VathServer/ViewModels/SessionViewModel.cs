@@ -31,6 +31,10 @@ namespace VathServer.ViewModels
         private ObservableCollection<ImageModel> _numberImages = new();
         [ObservableProperty]
         private ObservableCollection<ImageModel> _indicatorImages = new();
+        [ObservableProperty]
+        private double _imageHeight = 300.0;
+        [ObservableProperty]
+        private double _imageWidth = 300.0;
 
         public SessionViewModel(IMultipeerManager multipeerManager)
         {
