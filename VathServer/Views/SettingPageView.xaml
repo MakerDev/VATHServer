@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:VathServer"
     xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
     Title="SettingPage"
-    x:DataType="viewmodel:SettingPageViewModel">
+    x:DataType="viewmodel:SettingPageViewModel"
+    BackgroundColor="White">
 
     <VerticalStackLayout>
         <!--  Contrast Entry  -->

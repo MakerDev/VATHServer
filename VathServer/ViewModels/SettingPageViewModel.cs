@@ -21,8 +21,8 @@ namespace VathServer.ViewModels
         {
             var navigationParameter = new Dictionary<string, object>()
             {
-                { "ScreenSizeInInch", ScreenSizeInInch },
-                { "ContrastValue", ContrastValue }
+                { nameof(ScreenSizeInInch), ScreenSizeInInch },
+                { nameof(ContrastValue), ContrastValue }
             };
             await Shell.Current.GoToAsync(nameof(SessionView), navigationParameter);
         }

@@ -14,7 +14,7 @@ namespace VathServer.ViewModels
 {
     [QueryProperty(nameof(ContrastValue), "ContrastValue")]
     [QueryProperty(nameof(ScreenSizeInInch), "ScreenSizeInInch")]
-    public partial class SessionViewModel : ObservableObject
+    public partial class SessionViewModel : ObservableObject, IQueryAttributable
     {
         private readonly List<double> IMAGE_SIZES = new() { 6, 5.2, 4.2, 3.3, 2.6, 2.1, 1.8, 1.3, 1, 0.8, 0.65, 0.5, 0.4 }; // 각 레벨 별 이미지 크기
         private readonly List<double> EYESIGHT_RESULTS = new() { 0.1, 0.12, 0.16, 0.2, 0.25, 0.32, 0.4, 0.5, 0.63, 0.8, 1, 1.25, 1.6 };
@@ -34,38 +34,10 @@ namespace VathServer.ViewModels
 
         public SessionViewModel(IMultipeerManager multipeerManager)
         {
-            // Create the Image controls
-            ChangeImageSet();
             _multipeerManager = multipeerManager;
             _multipeerManager.OnDataReceived += OnDataReceived;
-#if MACCATALYST
-     MacMultipeerManager.OnDataReceived += OnMCDataReceived;
-#endif
         }
 
-#if MACCATALYST
-    private void OnMCDataReceived(string message)
-    {
-        Console.WriteLine(message);
-        var commandParam = message.Split(' ');
-        var command = commandParam[0];
-        var param = commandParam[1];
-
-        //TODO: 이게 Multipeer에서 온 데이터로 UI를 바꾸려고 하면 thread 문제가 발생한다. 해결하기.
-        switch (command)
-        {
-            case "Answer":
-                var answer = int.Parse(param);
-                SendMessage((IMAGE_NUMBERS[_currentImageIndex] == answer).ToString());
-                break;
-        }
-    }
-
-    private void SendMessage(string message)
-    {
-        MacMultipeerManager.SendData(message);
-    }
-#endif
         private void OnDataReceived(string message)
         {
             Console.WriteLine(message);
@@ -88,8 +60,6 @@ namespace VathServer.ViewModels
                     break;
             }
         }
-
-
 
         private void MoveToNextLevel()
         {
@@ -166,7 +136,7 @@ namespace VathServer.ViewModels
                     Opacity = ContrastValue
                 };
 
-                if (i == _currentImageIndex)
+                if (i / 2 == _currentImageIndex)
                 {
                     image.Opacity = 1.0;
                 }
@@ -200,6 +170,15 @@ namespace VathServer.ViewModels
 
             double inches = centimeters / 2.54;
             return inches * dpi;
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            ContrastValue = (double)query[nameof(ContrastValue)];
+            ScreenSizeInInch = (double)query[nameof(ScreenSizeInInch)];
+
+            // Generate first image set
+            ChangeImageSet();
         }
     }
 }
