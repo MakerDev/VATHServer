@@ -14,9 +14,8 @@ namespace VathServer.ViewModels
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             var result = (double)query["result"];
-            var targetEye = (string)query["target"];
 
-            ResultPrompt = $"{targetEye}눈의 시력은 {result:.1f}입니다";
+            ResultPrompt = $"시력은 {result:F2}입니다";
         }
     }
 }

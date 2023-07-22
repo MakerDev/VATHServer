@@ -95,6 +95,7 @@ namespace VathServer.ViewModels
         {
             //TODO: Display effect
             _currentLevel++;
+            _levelMissCount = 0;
 
             if (endTest || _currentLevel >= IMAGE_SIZES.Count)
             {

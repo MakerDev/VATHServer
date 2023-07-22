@@ -35,6 +35,7 @@ public static class MauiProgram
 #endif
 
 		Routing.RegisterRoute(nameof(SessionView), typeof(SessionView));
+		Routing.RegisterRoute(nameof(FinalResultView), typeof(FinalResultView));
 
 		return builder.Build();
 	}
