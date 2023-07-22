@@ -95,12 +95,13 @@ namespace VathServer.ViewModels
         {
             //TODO: Display effect
             _currentLevel++;
+            _levelMissCount = 0;
 
             if (endTest || _currentLevel >= IMAGE_SIZES.Count)
             {
                 //TODO: Move to end page and nofity done
                 var result = EYESIGHT_RESULTS[_currentLevel - 1];
-                _multipeerManager.SendData($"end {result}");
+                //_multipeerManager.SendData($"end {result}");
 
                 var navigationParameter = new Dictionary<string, object>()
                 {

@@ -99,12 +99,6 @@
                 Source="{Binding IndicatorImages[4].ImageUrl}"
                 WidthRequest="{Binding IndicatorImages[4].Width}" />
         </HorizontalStackLayout>
-
-        <!--  New Image Set Button  -->
-        <!--<Button
-            Command="{Binding MoveToNextLevelCommand}"
-            IsVisible="true"
-            Text="New Image Set" />-->
     </StackLayout>
 </ContentPage>
 
