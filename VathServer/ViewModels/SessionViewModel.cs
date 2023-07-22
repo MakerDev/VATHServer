@@ -53,7 +53,6 @@ namespace VathServer.ViewModels
                 case "Answer":
                     var answer = int.Parse(param);
                     var isCorrect = IMAGE_NUMBERS[_currentImageIndex] == answer;
-                    _multipeerManager.SendData(isCorrect.ToString());
 
                     if (isCorrect)
                     {
@@ -69,6 +68,8 @@ namespace VathServer.ViewModels
                             {
                                 await MoveToNextLevel(endTest: true);
                             });
+
+                            return;
                         }
                         else
                         {
@@ -80,6 +81,8 @@ namespace VathServer.ViewModels
                                 OnPropertyChanged(nameof(IndicatorImages));
                             });
                         }
+
+                        _multipeerManager.SendData(isCorrect.ToString());
                     }
                     break;
             }

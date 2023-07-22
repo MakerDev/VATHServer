@@ -101,10 +101,10 @@
         </HorizontalStackLayout>
 
         <!--  New Image Set Button  -->
-        <Button
+        <!--<Button
             Command="{Binding MoveToNextLevelCommand}"
             IsVisible="true"
-            Text="New Image Set" />
+            Text="New Image Set" />-->
     </StackLayout>
 </ContentPage>
 
