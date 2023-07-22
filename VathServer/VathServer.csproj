@@ -69,6 +69,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\FinalResultView.xaml.cs">
+	    <DependentUpon>FinalResultView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\SessionView.xaml.cs">
 	    <DependentUpon>SessionView</DependentUpon>
 	  </Compile>
@@ -78,6 +81,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\FinalResultView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\SessionView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

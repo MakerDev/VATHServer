@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VathServer.Interfaces;
 using VathServer.Models;
+using VathServer.Views;
 
 #if MACCATALYST
 using VathServer.Platforms.MacCatalyst;
@@ -16,6 +17,7 @@ namespace VathServer.ViewModels
     [QueryProperty(nameof(ScreenSizeInInch), "ScreenSizeInInch")]
     public partial class SessionViewModel : ObservableObject, IQueryAttributable
     {
+        private const int MAX_MISS_COUNT = 3;
         private readonly List<double> IMAGE_SIZES = new() { 6, 5.2, 4.2, 3.3, 2.6, 2.1, 1.8, 1.3, 1, 0.8, 0.65, 0.5, 0.4 }; // 각 레벨 별 이미지 크기
         private readonly List<double> EYESIGHT_RESULTS = new() { 0.1, 0.12, 0.16, 0.2, 0.25, 0.32, 0.4, 0.5, 0.63, 0.8, 1, 1.25, 1.6 };
         private readonly IMultipeerManager _multipeerManager;
@@ -23,6 +25,7 @@ namespace VathServer.ViewModels
 
         private int _currentLevel = 0;
         private int _currentImageIndex = -1;
+        private int _levelMissCount = 0; // The number of wrong answers for a certain level.
 
         public double ContrastValue { get; set; } = 1;
         public double ScreenSizeInInch { get; set; } = 14;
@@ -45,7 +48,6 @@ namespace VathServer.ViewModels
             var command = commandParam[0];
             var param = commandParam[1];
 
-            //TODO: 이게 Multipeer에서 온 데이터로 UI를 바꾸려고 하면 thread 문제가 발생한다. 해결하기.
             switch (command)
             {
                 case "Answer":
@@ -55,31 +57,52 @@ namespace VathServer.ViewModels
 
                     if (isCorrect)
                     {
-                        MainThread.BeginInvokeOnMainThread(MoveToNextLevel);
+                        MainThread.BeginInvokeOnMainThread(async () => await MoveToNextLevel());
                     }
                     else
                     {
-                        MainThread.BeginInvokeOnMainThread(() =>
+                        _levelMissCount++;
+
+                        if (_levelMissCount >= MAX_MISS_COUNT)
                         {
-                            SelectTarget();
-                            ChangeImagesWithSize(shuffle: false);
-                            SetupIndicator();
-                            OnPropertyChanged(nameof(IndicatorImages));
-                        });
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                await MoveToNextLevel(endTest: true);
+                            });
+                        }
+                        else
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                SelectTarget();
+                                ChangeImagesWithSize(shuffle: false);
+                                SetupIndicator();
+                                OnPropertyChanged(nameof(IndicatorImages));
+                            });
+                        }
                     }
                     break;
             }
         }
 
         [RelayCommand]
-        private void MoveToNextLevel()
+        private async Task MoveToNextLevel(bool endTest = false)
         {
             //TODO: Display effect
             _currentLevel++;
 
-            if (_currentLevel >= IMAGE_SIZES.Count)
+            if (endTest || _currentLevel >= IMAGE_SIZES.Count)
             {
-                //TODO: Move to end page
+                //TODO: Move to end page and nofity done
+                var result = EYESIGHT_RESULTS[_currentLevel - 1];
+                _multipeerManager.SendData($"end {result}");
+
+                var navigationParameter = new Dictionary<string, object>()
+                {
+                    { nameof(result), result }
+                };
+
+                await Shell.Current.GoToAsync(nameof(FinalResultView), navigationParameter);
                 return;
             }
 

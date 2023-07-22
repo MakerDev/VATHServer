@@ -1,5 +1,6 @@
 ﻿using VathServer.ViewModels;
 using VathServer.Interfaces;
+using VathServer.Views;
 #if WINDOWS
 using VathServer.Platforms.Windows;
 #elif MACCATALYST
@@ -25,6 +26,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<SessionView>();
 		builder.Services.AddTransient<SettingPageViewModel>();
 		builder.Services.AddTransient<SessionViewModel>();
+		builder.Services.AddTransient<FinalResultView>();
+		builder.Services.AddTransient<FinalResultViewModel>();
 #if MACCATALYST
 		builder.Services.AddSingleton<IMultipeerManager, MacMultipeerManager>();
 #elif WINDOWS
