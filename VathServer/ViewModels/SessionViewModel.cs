@@ -101,7 +101,7 @@ namespace VathServer.ViewModels
             {
                 //TODO: Move to end page and nofity done
                 var result = EYESIGHT_RESULTS[_currentLevel - 1];
-                //_multipeerManager.SendData($"end {result}");
+                _multipeerManager.SendData($"end {result}");
 
                 var navigationParameter = new Dictionary<string, object>()
                 {

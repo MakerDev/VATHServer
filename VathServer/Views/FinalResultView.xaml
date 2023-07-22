@@ -7,11 +7,12 @@
     Title="최종 결과"
     x:DataType="viewmodel:FinalResultViewModel"
     BackgroundColor="White">
-    <VerticalStackLayout VerticalOptions="CenterAndExpand">
+    <VerticalStackLayout VerticalOptions="Center">
         <Label
             FontSize="Large"
             HorizontalOptions="Center"
             Text="{Binding ResultPrompt}"
+            TextColor="Black"
             VerticalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>
