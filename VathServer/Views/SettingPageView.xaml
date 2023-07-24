@@ -10,6 +10,12 @@
     BackgroundColor="White">
 
     <VerticalStackLayout>
+        <Label
+            FontSize="Header"
+            HorizontalOptions="Center"
+            Text="{Binding IpAddress}"
+            TextColor="Black" />
+
         <!--  Contrast Entry  -->
         <HorizontalStackLayout HorizontalOptions="Center">
             <Label
