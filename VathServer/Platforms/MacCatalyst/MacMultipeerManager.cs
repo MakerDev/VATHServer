@@ -70,6 +70,11 @@ namespace VathServer.Platforms.MacCatalyst
         {
             OnDataReceived?.Invoke(message);
         }
+
+        async Task<bool> IMultipeerManager.SendDataAsync(string data)
+        {
+            return SendData(data);
+        }
     }
 
 
@@ -89,7 +94,7 @@ namespace VathServer.Platforms.MacCatalyst
         public override void DidChangeState(MCSession session, MCPeerID peerID, MCSessionState state)
         {
             Console.WriteLine($"New state:{state}");
-            if (state==MCSessionState.Connected)
+            if (state == MCSessionState.Connected)
             {
                 MacMultipeerManager.Instance?.DidConnect();
             }

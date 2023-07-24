@@ -12,5 +12,6 @@ namespace VathServer.Interfaces
         public event Action OnDeviceConnected;
 
         public bool SendData(string data);
+        public Task<bool> SendDataAsync(string data);
     }
 }

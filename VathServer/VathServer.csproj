@@ -66,6 +66,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+	  <PackageReference Include="Zeroconf" Version="3.6.11" />
 	</ItemGroup>
 
 	<ItemGroup>
