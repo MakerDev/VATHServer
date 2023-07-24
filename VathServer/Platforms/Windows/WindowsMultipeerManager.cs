@@ -66,8 +66,6 @@ namespace VathServer.Platforms.Windows
             });
         }
 
-
-
         public async Task<bool> SendDataAsync(string data)
         {
             if (_client == null || !_client.Connected || _writer == null)

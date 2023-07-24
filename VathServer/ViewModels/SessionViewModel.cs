@@ -90,7 +90,6 @@ namespace VathServer.ViewModels
             }
         }
 
-        [RelayCommand]
         private async Task MoveToNextLevel(bool endTest = false)
         {
             //TODO: Display effect
@@ -126,7 +125,6 @@ namespace VathServer.ViewModels
             _currentImageIndex = newTargetIndex;
         }
 
-        [RelayCommand]
         private void ChangeImageSet()
         {
             SelectTarget();
