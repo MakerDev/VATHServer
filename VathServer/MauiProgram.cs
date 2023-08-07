@@ -28,8 +28,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<SessionViewModel>();
 		builder.Services.AddTransient<FinalResultView>();
 		builder.Services.AddTransient<FinalResultViewModel>();
-#if MACCATALYST
-		builder.Services.AddSingleton<IMultipeerManager, MacMultipeerManager>();
+#if MACCATALYST || IOS
+        builder.Services.AddSingleton<IMultipeerManager, MacMultipeerManager>();
 #elif WINDOWS
         builder.Services.AddSingleton<IMultipeerManager, WindowsMultipeerManager>();
 #endif
