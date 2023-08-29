@@ -21,7 +21,7 @@ namespace VathServer.ViewModels
         private readonly List<double> IMAGE_SIZES = new() { 6, 5.2, 4.2, 3.3, 2.6, 2.1, 1.8, 1.3, 1, 0.8, 0.65, 0.5, 0.4 }; // 각 레벨 별 이미지 크기
         private readonly List<double> EYESIGHT_RESULTS = new() { 0.1, 0.12, 0.16, 0.2, 0.25, 0.32, 0.4, 0.5, 0.63, 0.8, 1, 1.25, 1.6 };
         private readonly IMultipeerManager _multipeerManager;
-        private List<int> IMAGE_NUMBERS = new() { 2, 3, 5 };
+        private List<int> IMAGE_NUMBERS = new() { 2, 3, 5, 6, 9 };
 
         private int _currentLevel = 0;
         private int _currentImageIndex = -1;
@@ -29,6 +29,8 @@ namespace VathServer.ViewModels
 
         public double ContrastValue { get; set; } = 1;
         public double ScreenSizeInInch { get; set; } = 14;
+        public int NumImagesToDisplay { get; set; } = 3;
+
 
         [ObservableProperty]
         private ObservableCollection<ImageModel> _numberImages = new();
@@ -116,10 +118,10 @@ namespace VathServer.ViewModels
 
         private void SelectTarget()
         {
-            var newTargetIndex = new Random().Next(IMAGE_NUMBERS.Count);
+            var newTargetIndex = new Random().Next(NumImagesToDisplay);
             while (newTargetIndex == _currentImageIndex)
             {
-                newTargetIndex = new Random().Next(IMAGE_NUMBERS.Count);
+                newTargetIndex = new Random().Next(NumImagesToDisplay);
             }
 
             _currentImageIndex = newTargetIndex;
@@ -127,6 +129,21 @@ namespace VathServer.ViewModels
 
         private void ChangeImageSet()
         {
+            var width = DeviceDisplay.Current.MainDisplayInfo.Width;
+            var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
+            if (width / pixels > 9)
+            {
+                NumImagesToDisplay = 5;
+            }
+            else if (width / pixels > 7)
+            {
+                NumImagesToDisplay = 4;
+            }
+            else
+            {
+                NumImagesToDisplay = 3;
+            }
+
             SelectTarget();
             ChangeImagesWithSize();
             SetupIndicator();
@@ -136,27 +153,19 @@ namespace VathServer.ViewModels
 
         private void SetupIndicator()
         {
-            if (IndicatorImages.Count <= 0)
+            IndicatorImages.Clear();
+
+            for (int i = 0; i < NumImagesToDisplay * 2 - 1; i++)
             {
-                for (int i = 0; i < IMAGE_NUMBERS.Count * 2 - 1; i++)
+                ImageModel indicator = new()
                 {
-                    ImageModel indicator = new()
-                    {
-                        ImageUrl = "pointing_hand.png",
-                        Width = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
-                        Height = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
-                        Opacity = 0.0
-                    };
+                    ImageUrl = "pointing_hand.png",
+                    Width = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
+                    Height = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]),
+                    Opacity = 0.0
+                };
 
-                    IndicatorImages.Add(indicator);
-                }
-            }
-
-            for (int i = 0; i < IMAGE_NUMBERS.Count * 2 - 1; i++)
-            {
-                IndicatorImages[i].Width = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
-                IndicatorImages[i].Height = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
-                IndicatorImages[i].Opacity = 0.0;
+                IndicatorImages.Add(indicator);
             }
 
             IndicatorImages[_currentImageIndex * 2].Opacity = 1.0;
@@ -172,7 +181,7 @@ namespace VathServer.ViewModels
                 IMAGE_NUMBERS = IMAGE_NUMBERS.OrderBy(a => Guid.NewGuid()).ToList();
             }
 
-            for (int i = 0; i < IMAGE_NUMBERS.Count * 2 - 1; i++)
+            for (int i = 0; i < NumImagesToDisplay * 2 - 1; i++)
             {
                 ImageModel image = new()
                 {
@@ -208,14 +217,22 @@ namespace VathServer.ViewModels
             double width = DeviceDisplay.Current.MainDisplayInfo.Width;
             double height = DeviceDisplay.Current.MainDisplayInfo.Height;
             double dpi = CalculateDPI(ScreenSizeInInch, width, height);
+            double scaleFactor = 1;
 
             if (DeviceInfo.Platform == DevicePlatform.MacCatalyst)
             {
                 dpi = 163;
             }
 
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                scaleFactor = 2;
+            }
+
             double inches = centimeters / 2.54;
-            return inches * dpi;
+            var pixels = inches * dpi / scaleFactor;
+
+            return pixels;
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
