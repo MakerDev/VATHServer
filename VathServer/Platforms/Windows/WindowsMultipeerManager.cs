@@ -36,10 +36,8 @@ namespace VathServer.Platforms.Windows
 
         public async Task StartListeningAsync()
         {
-            
-
             _client = await _listener.AcceptTcpClientAsync();
-            
+
             _stream = _client.GetStream();
             _reader = new StreamReader(_stream, Encoding.UTF8, true, 512);
             _writer = new StreamWriter(_stream, Encoding.UTF8, leaveOpen: true);
@@ -53,7 +51,7 @@ namespace VathServer.Platforms.Windows
                 {
                     var data = await _reader.ReadLineAsync();
 
-                    if (data.StartsWith("close"))
+                    if (string.IsNullOrEmpty(data) || data.StartsWith("close"))
                     {
                         break;
                     }
