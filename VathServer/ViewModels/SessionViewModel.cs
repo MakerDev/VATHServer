@@ -217,7 +217,7 @@ namespace VathServer.ViewModels
             double width = DeviceDisplay.Current.MainDisplayInfo.Width;
             double height = DeviceDisplay.Current.MainDisplayInfo.Height;
             double dpi = CalculateDPI(ScreenSizeInInch, width, height);
-            double scaleFactor = 1;
+            double scaleFactor = DeviceDisplay.Current.MainDisplayInfo.Density;
 
             if (DeviceInfo.Platform == DevicePlatform.MacCatalyst)
             {
