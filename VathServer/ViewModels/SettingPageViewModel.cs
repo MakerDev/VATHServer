@@ -56,7 +56,7 @@ namespace VathServer.ViewModels
                 }
             }
 
-            if (ipAddressCandidates.Count > 1)
+            if (ipAddressCandidates.Count > 0)
             {
                 foreach (var ipAddress in ipAddressCandidates)
                 {
@@ -68,11 +68,14 @@ namespace VathServer.ViewModels
                         return;
                     }
                 }
-            }
-            else
-            {
+
+                // If there is no subnet mask, take the first address.
                 IpAddress = ipAddressCandidates[0].Address.ToString();
+                return
             }
+
+            // If there is no address, set it to localhost.
+            IpAddress = "192.0.0.1";
         }
 
         [RelayCommand]
