@@ -15,6 +15,7 @@
         <!--  Dummy view  -->
         <HorizontalStackLayout
             HorizontalOptions="Center"
+            IsVisible="{Binding IsDummyHeaderVisible}"
             Opacity="0"
             VerticalOptions="Start">
             <Image

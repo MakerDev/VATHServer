@@ -31,7 +31,8 @@ namespace VathServer.ViewModels
         public double ScreenSizeInInch { get; set; } = 14;
         public int NumImagesToDisplay { get; set; } = 3;
 
-
+        [ObservableProperty]
+        private bool _isDummyHeaderVisible = true;
         [ObservableProperty]
         private ObservableCollection<ImageModel> _numberImages = new();
         [ObservableProperty]
@@ -129,21 +130,21 @@ namespace VathServer.ViewModels
 
         private void ChangeImageSet()
         {
+#if IOS || ANDROID
+            //패드 종류 디바이스는 가로모드로 사용하기 때문
+            var width = DeviceDisplay.Current.MainDisplayInfo.Height;
+#else
             var width = DeviceDisplay.Current.MainDisplayInfo.Width;
+#endif
             var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
 
-            if (width / pixels > 9)
-            {
-                NumImagesToDisplay = 5;
-            }
-            else if (width / pixels > 7)
-            {
-                NumImagesToDisplay = 4;
-            }
-            else
-            {
-                NumImagesToDisplay = 3;
-            }
+            NumImagesToDisplay = (int)(width / pixels / 2);
+
+#if IOS || ANDROID
+            IsDummyHeaderVisible = DeviceDisplay.Current.MainDisplayInfo.Width / pixels > 3;
+#else
+            IsDummyHeaderVisible = DeviceDisplay.Current.MainDisplayInfo.Height / pixels > 3;
+#endif
 
             SelectTarget();
             ChangeImagesWithSize();
