@@ -27,6 +27,7 @@ namespace VathServer.ViewModels
         {
             // Get all network interfaces on the system
             NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            var ipAddressCandidates = new List<UnicastIPAddressInformation>();
 
             // Loop through each network interface
             foreach (NetworkInterface networkInterface in networkInterfaces)
@@ -46,17 +47,31 @@ namespace VathServer.ViewModels
                     foreach (UnicastIPAddressInformation ipAddress in ipAddresses)
                     {
                         // Only consider IPv4 addresses
-                        if (ipAddress.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork 
-                                && ipAddress.IPv4Mask.ToString().Split('.')[2] == "255")
+                        if (ipAddress.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
                             Console.WriteLine($"IPv4 Address: {ipAddress.Address}");
-                            IpAddress = ipAddress.Address.ToString();
-
-                            //Take the first address.
-                            return;
+                            ipAddressCandidates.Add(ipAddress);
                         }
                     }
                 }
+            }
+
+            if (ipAddressCandidates.Count > 1)
+            {
+                foreach (var ipAddress in ipAddressCandidates)
+                {
+                    if (ipAddress.IPv4Mask.ToString().Split('.')[2] == "255")
+                    {
+                        IpAddress = ipAddress.Address.ToString();
+
+                        //Take the first address.
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                IpAddress = ipAddressCandidates[0].Address.ToString();
             }
         }
 
