@@ -130,21 +130,17 @@ namespace VathServer.ViewModels
 
         private void ChangeImageSet()
         {
-#if IOS || ANDROID
-            //패드 종류 디바이스는 가로모드로 사용하기 때문
-            var width = DeviceDisplay.Current.MainDisplayInfo.Height;
-#else
-            var width = DeviceDisplay.Current.MainDisplayInfo.Width;
-#endif
+            var density = DeviceDisplay.Current.MainDisplayInfo.Density;
+            var width = DeviceDisplay.Current.MainDisplayInfo.Width / density;
+            var height = DeviceDisplay.Current.MainDisplayInfo.Height / density;
+
             var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
 
             NumImagesToDisplay = (int)(width / pixels / 2);
 
-#if IOS || ANDROID
-            IsDummyHeaderVisible = DeviceDisplay.Current.MainDisplayInfo.Width / pixels > 3;
-#else
-            IsDummyHeaderVisible = DeviceDisplay.Current.MainDisplayInfo.Height / pixels > 3;
-#endif
+
+            IsDummyHeaderVisible = height / pixels > 3;
+
 
             SelectTarget();
             ChangeImagesWithSize();
