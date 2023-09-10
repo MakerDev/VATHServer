@@ -131,6 +131,7 @@ namespace VathServer.ViewModels
         {
             var width = DeviceDisplay.Current.MainDisplayInfo.Width;
             var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
+
             if (width / pixels > 9)
             {
                 NumImagesToDisplay = 5;
