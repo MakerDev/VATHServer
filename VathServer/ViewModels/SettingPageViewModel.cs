@@ -20,9 +20,7 @@ namespace VathServer.ViewModels
         private string _ipAddress = "";
         public SettingPageViewModel()
         {
-#if WINDOWS
             GetIpAddress();
-#endif  
         }
 
         private void GetIpAddress()
