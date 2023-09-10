@@ -45,6 +45,10 @@
   
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('maccatalyst'))">
     <DefineConstants>MACCATALYST</DefineConstants>
+  </PropertyGroup>  
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   
 	<ItemGroup>

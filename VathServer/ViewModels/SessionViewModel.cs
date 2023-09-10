@@ -219,16 +219,6 @@ namespace VathServer.ViewModels
             double dpi = CalculateDPI(ScreenSizeInInch, width, height);
             double scaleFactor = DeviceDisplay.Current.MainDisplayInfo.Density;
 
-            if (DeviceInfo.Platform == DevicePlatform.MacCatalyst)
-            {
-                dpi = 163;
-            }
-
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                scaleFactor = 2;
-            }
-
             double inches = centimeters / 2.54;
             var pixels = inches * dpi / scaleFactor;
 
