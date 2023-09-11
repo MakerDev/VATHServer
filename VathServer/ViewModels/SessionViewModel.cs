@@ -136,11 +136,8 @@ namespace VathServer.ViewModels
 
             var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
 
-            NumImagesToDisplay = (int)(width / pixels / 2);
-
-
+            NumImagesToDisplay = (int)(width / pixels / 2) + 1;
             IsDummyHeaderVisible = height / pixels > 3;
-
 
             SelectTarget();
             ChangeImagesWithSize();
