@@ -128,15 +128,39 @@ namespace VathServer.ViewModels
             _currentImageIndex = newTargetIndex;
         }
 
+        private int GetNumImagesToDisplay(double width, double pixels)
+        {
+            var temp = (int)(width / pixels);
+            var result = (temp + 1) / 2;
+            if (temp % 2 == 0)
+            {
+                return temp / 2;
+            }
+
+            if(result > 5)
+            {
+                result = 5;
+            }
+
+            return result;
+        }
+
         private void ChangeImageSet()
         {
             var density = DeviceDisplay.Current.MainDisplayInfo.Density;
             var width = DeviceDisplay.Current.MainDisplayInfo.Width / density;
             var height = DeviceDisplay.Current.MainDisplayInfo.Height / density;
 
+            if (height > width)
+            {
+                var temp = width;
+                width = height;
+                height = temp;
+            }
+
             var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
 
-            NumImagesToDisplay = (int)(width / pixels / 2) + 1;
+            NumImagesToDisplay = GetNumImagesToDisplay(width, pixels);
             IsDummyHeaderVisible = height / pixels > 3;
 
             SelectTarget();

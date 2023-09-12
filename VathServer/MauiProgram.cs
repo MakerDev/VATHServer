@@ -3,7 +3,7 @@ using VathServer.Interfaces;
 using VathServer.Views;
 using VathServer.Services;
 #if WINDOWS
-using VathServer.Platforms.Windows;
+//using VathServer.Platforms.Windows;
 #elif MACCATALYST
 using VathServer.Platforms.MacCatalyst;
 #elif IOS
