@@ -130,7 +130,7 @@ namespace VathServer.ViewModels
 
         private int GetNumImagesToDisplay(double width, double pixels)
         {
-            var temp = (int)(width / pixels);
+            var temp = (int)Math.Round(width / pixels);
             var result = (temp + 1) / 2;
             if (temp % 2 == 0)
             {
