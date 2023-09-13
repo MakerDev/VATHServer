@@ -241,6 +241,11 @@ namespace VathServer.ViewModels
             double inches = centimeters / 2.54;
             var pixels = inches * dpi / scaleFactor;
 
+            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+            {
+                pixels *= 1.33;
+            }
+
             return pixels;
         }
 
