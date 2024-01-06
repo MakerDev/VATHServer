@@ -5,11 +5,13 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using VathServer.Interfaces;
 
 namespace VathServer.ViewModels
 {
     public partial class SettingPageViewModel : ObservableObject
     {
+        private readonly IMultipeerManager _multipeerManager;
         [ObservableProperty]
         private double _screenSizeInInch = 14;
         [ObservableProperty]
@@ -18,9 +20,12 @@ namespace VathServer.ViewModels
         private double _contrastValue = 1.0;
         [ObservableProperty]
         private string _ipAddress = "";
-        public SettingPageViewModel()
+
+
+        public SettingPageViewModel(IMultipeerManager multipeerManager)
         {
             GetIpAddress();
+            _multipeerManager = multipeerManager;
         }
 
         private void GetIpAddress()

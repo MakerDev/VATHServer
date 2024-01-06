@@ -160,7 +160,7 @@ namespace VathServer.ViewModels
 
             var pixels = ConvertCentimetersToPixels(IMAGE_SIZES[_currentLevel]);
 
-            NumImagesToDisplay = GetNumImagesToDisplay(width, pixels);
+            NumImagesToDisplay = Math.Min(5, GetNumImagesToDisplay(width, pixels));
             IsDummyHeaderVisible = height / pixels > 3;
 
             SelectTarget();

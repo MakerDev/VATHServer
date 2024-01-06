@@ -26,7 +26,7 @@ namespace VathServer.Services
         {
             _listener = new TcpListener(IPAddress.Any, PORT);
             _listener.Start();
-            StartListeningAsync();
+            _ = StartListeningAsync();
         }
 
         public async Task StartListeningAsync()

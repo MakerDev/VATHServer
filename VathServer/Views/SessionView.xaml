@@ -8,6 +8,7 @@
     xmlns:viewmodel="clr-namespace:VathServer.ViewModels"
     x:DataType="viewmodel:SessionViewModel"
     BackgroundColor="White">
+
     <StackLayout
         BackgroundColor="White"
         HorizontalOptions="Center"
@@ -43,6 +44,26 @@
                 Opacity="{Binding NumberImages[4].Opacity}"
                 Source="{Binding NumberImages[4].ImageUrl}"
                 WidthRequest="{Binding NumberImages[4].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[5].Height}"
+                Opacity="{Binding NumberImages[5].Opacity}"
+                Source="{Binding NumberImages[5].ImageUrl}"
+                WidthRequest="{Binding NumberImages[5].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[6].Height}"
+                Opacity="{Binding NumberImages[6].Opacity}"
+                Source="{Binding NumberImages[6].ImageUrl}"
+                WidthRequest="{Binding NumberImages[6].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[7].Height}"
+                Opacity="{Binding NumberImages[7].Opacity}"
+                Source="{Binding NumberImages[7].ImageUrl}"
+                WidthRequest="{Binding NumberImages[7].Width}" />
+            <Image
+                HeightRequest="{Binding NumberImages[8].Height}"
+                Opacity="{Binding NumberImages[8].Opacity}"
+                Source="{Binding NumberImages[8].ImageUrl}"
+                WidthRequest="{Binding NumberImages[8].Width}" />
         </HorizontalStackLayout>
 
         <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
