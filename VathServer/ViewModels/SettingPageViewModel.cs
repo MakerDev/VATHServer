@@ -67,15 +67,15 @@ namespace VathServer.ViewModels
                 {
                     if (ipAddress.IPv4Mask.ToString().Split('.')[2] == "255")
                     {
-                        IpAddress = ipAddress.Address.ToString();
+                        IpAddress += ipAddress.Address.ToString() + "\n";
 
                         //Take the first address.
-                        return;
+                        //return;
                     }
                 }
 
                 // If there is no subnet mask, take the first address.
-                IpAddress = ipAddressCandidates[0].Address.ToString();
+                IpAddress += ipAddressCandidates[0].Address.ToString();
                 return;
             }
 
