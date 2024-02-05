@@ -85,6 +85,26 @@
   
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
     <ApplicationId>com.eis.vathserver</ApplicationId>
+  </PropertyGroup>  
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidUseAapt2>True</AndroidUseAapt2>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\\dev\VathServer\VathServer\myapp.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>dbwls6683</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>myapp</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>dbwls6683</AndroidSigningKeyPass>
+  </PropertyGroup>  
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\\dev\VathServer\VathServer\myapp.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>dbwls6683</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>myapp</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>dbwls6683</AndroidSigningKeyPass>
   </PropertyGroup>
   
 	<ItemGroup>
