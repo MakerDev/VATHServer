@@ -13,19 +13,38 @@ namespace VathServer.ViewModels
     {
         private readonly IMultipeerManager _multipeerManager;
         [ObservableProperty]
-        private double _screenSizeInInch = 14;
+        private static double _screenSizeInInch = 14;
         [ObservableProperty]
-        private double _imageSizeInCm = 5;
+        private static double _imageSizeInCm = 5;
         [ObservableProperty]
-        private double _contrastValue = 1.0;
+        private static double _contrastValue = 1.0;
         [ObservableProperty]
-        private string _ipAddress = "";
+        private static string _ipAddress = "";
 
 
         public SettingPageViewModel(IMultipeerManager multipeerManager)
         {
             GetIpAddress();
             _multipeerManager = multipeerManager;
+            _multipeerManager.OnDataReceived += OnDataReceived;
+        }
+
+        private void OnDataReceived(string message)
+        {
+            if (message.StartsWith("conn"))
+            {
+                MainThread.BeginInvokeOnMainThread(async () => await StartSessionAsync());
+                
+            }
+        }
+
+        public static Dictionary<string, object> GetSesseionNavigationParam()
+        {
+            return new Dictionary<string, object>()
+            {
+                { nameof(ScreenSizeInInch), _screenSizeInInch },
+                { nameof(ContrastValue), _contrastValue }
+            };
         }
 
         private void GetIpAddress()
@@ -86,11 +105,10 @@ namespace VathServer.ViewModels
         [RelayCommand]
         private async Task StartSessionAsync()
         {
-            var navigationParameter = new Dictionary<string, object>()
-            {
-                { nameof(ScreenSizeInInch), ScreenSizeInInch },
-                { nameof(ContrastValue), ContrastValue }
-            };
+            _multipeerManager.OnDataReceived -= OnDataReceived;
+
+            var navigationParameter = GetSesseionNavigationParam();
+
             await Shell.Current.GoToAsync(nameof(SessionView), navigationParameter);
         }
     }

@@ -41,6 +41,7 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<IMultipeerManager, TcpMultipeerManager>();
 
+		Routing.RegisterRoute(nameof(SettingPageView), typeof(SettingPageView));
 		Routing.RegisterRoute(nameof(SessionView), typeof(SessionView));
 		Routing.RegisterRoute(nameof(FinalResultView), typeof(FinalResultView));
 

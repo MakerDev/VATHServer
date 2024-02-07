@@ -49,9 +49,9 @@
                 Text="{Binding ScreenSizeInInch, Mode=TwoWay}"
                 TextColor="Black" />
         </HorizontalStackLayout>
-        <Button
+        <!--<Button
             Margin="0,20,0,0"
             Command="{Binding StartSessionCommand}"
-            Text="시작하기!!" />
+            Text="시작하기!!" />-->
     </VerticalStackLayout>
 </ContentPage>

@@ -110,6 +110,8 @@ namespace VathServer.ViewModels
                     { nameof(result), result }
                 };
 
+                _multipeerManager.OnDataReceived -= OnDataReceived;
+
                 await Shell.Current.GoToAsync(nameof(FinalResultView), navigationParameter);
                 return;
             }
